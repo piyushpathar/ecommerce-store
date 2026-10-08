@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -58,6 +59,27 @@ class OrderController extends Controller
         ]);
 
         $newStatus = $request->input('status');
+        $closed = ['cancelled', 'refunded'];
+
+        if (in_array($order->status, $closed, true) && !in_array($newStatus, $closed, true)) {
+            return back()->with('error', "Order #{$order->order_number} is {$order->status} and cannot be reopened.");
+        }
+
+        // Return stock when an open order is cancelled or refunded
+        if (!in_array($order->status, $closed, true) && in_array($newStatus, $closed, true)) {
+            foreach ($order->items ?? [] as $item) {
+                $product = Product::find($item['product_id'] ?? null);
+                if ($product) {
+                    $stock = $product->stock + (int) $item['quantity'];
+                    $product->update([
+                        'stock' => $stock,
+                        'stock_status' => $stock > 0 ? 'in_stock' : 'out_of_stock',
+                        'sales_count' => max(0, $product->sales_count - (int) $item['quantity']),
+                    ]);
+                }
+            }
+        }
+
         $carrier = $request->input('tracking_carrier', $order->tracking_carrier);
         $trackingNum = $request->input('tracking_number', $order->tracking_number);
         $notes = $request->input('notes', $order->notes);

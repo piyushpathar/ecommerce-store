@@ -25,7 +25,7 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt([...$credentials, 'is_active' => true], $request->boolean('remember'))) {
             $request->session()->regenerate();
 
             if (Auth::user()->isAdmin()) {
@@ -172,6 +172,10 @@ class AuthController extends Controller
                             ]);
                         }
 
+                        if (!$user->is_active) {
+                            return redirect()->route('login')->with('error', 'Your account has been disabled. Please contact support.');
+                        }
+
                         Auth::login($user);
                         return redirect()->intended(route('home'))->with('success', 'Logged in successfully via Google!');
                     }
@@ -216,6 +220,10 @@ class AuthController extends Controller
                 'email_verified_at' => now(),
                 'addresses' => [],
             ]);
+        }
+
+        if (!$user->is_active) {
+            return redirect()->route('login')->with('error', 'Your account has been disabled. Please contact support.');
         }
 
         Auth::login($user);

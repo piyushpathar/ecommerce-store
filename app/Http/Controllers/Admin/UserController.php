@@ -28,6 +28,11 @@ class UserController extends Controller
     public function toggleStatus(string $id)
     {
         $user = User::findOrFail($id);
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'You cannot change your own account here.');
+        }
+
         $user->is_active = !$user->is_active;
         $user->save();
 
@@ -37,6 +42,11 @@ class UserController extends Controller
     public function toggleRole(string $id)
     {
         $user = User::findOrFail($id);
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'You cannot change your own account here.');
+        }
+
         $user->role = ($user->role === 'admin') ? 'customer' : 'admin';
         $user->save();
 

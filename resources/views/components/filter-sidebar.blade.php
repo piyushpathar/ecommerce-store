@@ -88,7 +88,7 @@
 
         <!-- Header -->
         <div class="px-4 py-3.5 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 min-w-0">
                 <div class="w-8 h-8 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
                     <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                 </div>
@@ -105,7 +105,7 @@
 
             @if($activeCount > 0)
             <a href="{{ $actionUrl }}{{ $query ? '?q=' . urlencode($query) : '' }}"
-               class="text-[11px] font-bold text-rose-500 hover:text-rose-600 dark:text-rose-400 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors">
+               class="shrink-0 whitespace-nowrap text-[11px] font-bold text-rose-500 hover:text-rose-600 dark:text-rose-400 flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-colors">
                 <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
                 <span>Clear all</span>
             </a>
@@ -208,7 +208,7 @@
                         </div>
                         @endif
 
-                        <div class="space-y-0.5 {{ $sheet ? '' : 'max-h-60 overflow-y-auto pr-1' }}">
+                        <div class="space-y-0.5 {{ $sheet ? '' : 'max-h-72 overflow-y-auto overscroll-contain nm-thin-scroll -mr-1 pr-1' }}">
                             <label class="nm-option" x-show="!brandSearch.trim()">
                                 <input type="radio" value="" x-model="selectedBrand" data-autosubmit class="nm-radio">
                                 <span>All Brands</span>
@@ -254,7 +254,7 @@
                 <div x-show="sheet || open.price" x-collapse>
                     <div class="{{ $sheet ? '' : 'mt-3' }} space-y-3">
                         <div class="grid grid-cols-2 gap-1.5">
-                            @foreach([[null, 2000, 'Under ₹2K'], [2000, 10000, '₹2K – ₹10K'], [10000, 50000, '₹10K – ₹50K'], [50000, null, 'Above ₹50K']] as [$min, $max, $label])
+                            @foreach([[null, 2000, 'Under ₹2K'], [2000, 10000, '₹2K – 10K'], [10000, 50000, '₹10K – 50K'], [50000, null, 'Above ₹50K']] as [$min, $max, $label])
                             <button type="button"
                                     @click="setPriceRange(@js($min), @js($max))"
                                     class="{{ $pill }}"

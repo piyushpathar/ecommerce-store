@@ -90,7 +90,7 @@ class ProductController extends Controller
         Product::create([
             'title' => $validated['title'],
             'slug' => $slug,
-            'sku' => $validated['sku'] ?: 'NM-' . strtoupper(Str::random(6)),
+            'sku' => ($validated['sku'] ?? null) ?: 'NM-' . strtoupper(Str::random(6)),
             'category_id' => $category->id,
             'category_slug' => $category->slug,
             'category_name' => $category->name,
@@ -127,7 +127,7 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::findOrFail($id);
-        $categories = Category::where('is_active', true)->get();
+        $categories = Category::orderBy('sort_order')->get();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -175,7 +175,7 @@ class ProductController extends Controller
 
         $product->update([
             'title' => $validated['title'],
-            'sku' => $validated['sku'] ?: $product->sku,
+            'sku' => ($validated['sku'] ?? null) ?: $product->sku,
             'category_id' => $category->id,
             'category_slug' => $category->slug,
             'category_name' => $category->name,
@@ -193,7 +193,7 @@ class ProductController extends Controller
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
             'is_nova_choice' => $request->boolean('is_nova_choice'),
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully!');

@@ -123,6 +123,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('/categories', [AdminCategory::class, 'store'])->name('categories.store');
     Route::put('/categories/{id}', [AdminCategory::class, 'update'])->name('categories.update');
     Route::delete('/categories/{id}', [AdminCategory::class, 'destroy'])->name('categories.destroy');
+    Route::post('/categories/{id}/toggle', [AdminCategory::class, 'toggle'])->name('categories.toggle');
 
     // Orders
     Route::get('/orders', [AdminOrder::class, 'index'])->name('orders.index');
@@ -134,6 +135,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::post('/coupons', [AdminCoupon::class, 'store'])->name('coupons.store');
     Route::put('/coupons/{id}', [AdminCoupon::class, 'update'])->name('coupons.update');
     Route::delete('/coupons/{id}', [AdminCoupon::class, 'destroy'])->name('coupons.destroy');
+    Route::post('/coupons/{id}/toggle', [AdminCoupon::class, 'toggle'])->name('coupons.toggle');
 
     // Users
     Route::get('/users', [AdminUser::class, 'index'])->name('users.index');

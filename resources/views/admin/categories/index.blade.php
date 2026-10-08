@@ -45,7 +45,7 @@
                             </div>
                         </td>
                         <td class="p-4 font-mono text-slate-400">{{ $cat->slug }}</td>
-                        <td class="p-4 font-mono font-bold text-brand-400">{{ $cat->products_count ?? $cat->products()->count() }} items</td>
+                        <td class="p-4 font-mono font-bold text-brand-400">{{ $cat->products_count }} items</td>
                         <td class="p-4 font-mono text-slate-300">#{{ $cat->sort_order }}</td>
                         <td class="p-4">
                             <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $cat->is_active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400' }}">
@@ -54,6 +54,12 @@
                         </td>
                         <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-2">
+                                <form action="{{ route('admin.categories.toggle', $cat->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-[10px] text-slate-300 transition-colors">
+                                        {{ $cat->is_active ? 'Disable' : 'Enable' }}
+                                    </button>
+                                </form>
                                 <form action="{{ route('admin.categories.destroy', $cat->id) }}" method="POST" onsubmit="return confirm('Delete this category?');">
                                     @csrf
                                     @method('DELETE')

@@ -49,11 +49,18 @@
                             {{ $cp->used_count }} / {{ $cp->usage_limit ?: 'Unlimited' }}
                         </td>
                         <td class="p-4">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $cp->is_active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400' }}">
-                                {{ $cp->is_active ? 'Active' : 'Expired' }}
+                            @php $cpExpired = $cp->expires_at && $cp->expires_at->isPast(); @endphp
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ $cp->is_active && !$cpExpired ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-500/20 text-slate-400' }}">
+                                {{ !$cp->is_active ? 'Inactive' : ($cpExpired ? 'Expired' : 'Active') }}
                             </span>
                         </td>
                         <td class="p-4 text-right font-sans">
+                            <form action="{{ route('admin.coupons.toggle', $cp->id) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-[10px] text-slate-300 transition-colors">
+                                    {{ $cp->is_active ? 'Deactivate' : 'Activate' }}
+                                </button>
+                            </form>
                             <form action="{{ route('admin.coupons.destroy', $cp->id) }}" method="POST" onsubmit="return confirm('Delete this coupon?');" class="inline">
                                 @csrf
                                 @method('DELETE')

@@ -169,15 +169,15 @@
 
 
     <!-- 4. Layout Grid: Sidebar + Product Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-5 items-start">
+    <div class="flex flex-col lg:flex-row gap-3 lg:gap-5 items-start">
 
         <!-- Desktop Filters Sidebar (Sticky) -->
-        <aside class="hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl">
+        <aside class="hidden lg:block w-[280px] xl:w-[300px] shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar rounded-2xl">
             <x-filter-sidebar :categories="$categories" :brands="$brands" :activeCategory="$category" :actionUrl="route('shop.category', $category->slug)" :totalProducts="$products->total()" />
         </aside>
 
         <!-- Product Cards Grid Area -->
-        <div class="lg:col-span-9 xl:col-span-9 2xl:col-span-10">
+        <div class="flex-1 min-w-0 w-full">
 
             @if($products->isEmpty())
             <div class="bg-white dark:bg-[#0f1723] rounded-2xl p-8 sm:p-12 text-center border border-slate-200 dark:border-white/10 shadow-2xs space-y-3">
@@ -194,7 +194,7 @@
             @else
 
             <!-- High-density 2-Col Mobile, 3-to-5 Col Desktop Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-2 sm:gap-3">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
                 @foreach($products as $prod)
                     @include('components.product-card', ['prod' => $prod])
                 @endforeach

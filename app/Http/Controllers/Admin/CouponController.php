@@ -16,6 +16,8 @@ class CouponController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['code' => strtoupper(trim((string) $request->input('code')))]);
+
         $request->validate([
             'code' => 'required|string|max:30|unique:coupons,code',
             'discount_type' => 'required|in:percentage,fixed',
@@ -60,10 +62,18 @@ class CouponController extends Controller
             'min_spend' => (float) $request->input('min_spend', 0),
             'max_discount' => $request->input('max_discount') ? (float) $request->input('max_discount') : null,
             'usage_limit' => $request->input('usage_limit') ? (int) $request->input('usage_limit') : null,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->boolean('is_active'),
         ]);
 
         return back()->with('success', 'Coupon updated successfully!');
+    }
+
+    public function toggle(string $id)
+    {
+        $coupon = Coupon::findOrFail($id);
+        $coupon->update(['is_active' => !$coupon->is_active]);
+
+        return back()->with('success', "Coupon {$coupon->code} " . ($coupon->is_active ? 'activated.' : 'deactivated.'));
     }
 
     public function destroy(string $id)

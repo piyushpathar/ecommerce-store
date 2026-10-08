@@ -66,15 +66,15 @@
 
 
     <!-- Layout Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-start">
+    <div class="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
 
         <!-- Desktop Filters Sidebar (Sticky, Viewport-optimized) -->
-        <aside class="hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl">
+        <aside class="hidden lg:block w-[280px] xl:w-[300px] shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar rounded-2xl">
             <x-filter-sidebar :categories="$categories" :brands="$brands" :actionUrl="route('shop.index')" :totalProducts="$products->total()" />
         </aside>
 
         <!-- Product Cards Grid Area -->
-        <div class="lg:col-span-9 xl:col-span-9 2xl:col-span-10 space-y-3">
+        <div class="flex-1 min-w-0 w-full space-y-3">
 
             @if(request()->anyFilled(['category', 'brand', 'min_price', 'max_price', 'min_rating', 'min_discount', 'in_stock_only']))
             <!-- Active filter chips -->
@@ -136,7 +136,7 @@
             @else
 
             <!-- 2-Column Mobile, 3-to-5 Column Desktop High-Density Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-2.5 sm:gap-3.5">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3.5">
                 @foreach($products as $prod)
                     @include('components.product-card', ['prod' => $prod])
                 @endforeach

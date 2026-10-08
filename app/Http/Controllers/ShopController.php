@@ -80,6 +80,7 @@ class ShopController extends Controller
         if (Auth::check()) {
             $hasPurchased = \App\Models\Order::where('user_id', Auth::id())
                 ->whereJsonContains('items', ['product_id' => $product->id])
+                ->whereNotIn('status', ['cancelled', 'refunded'])
                 ->exists();
         }
 
@@ -96,10 +97,15 @@ class ShopController extends Controller
 
         $hasPurchased = \App\Models\Order::where('user_id', Auth::id())
             ->whereJsonContains('items', ['product_id' => $product->id])
+            ->whereNotIn('status', ['cancelled', 'refunded'])
             ->exists();
 
         if (!$hasPurchased) {
             return back()->with('error', 'Only verified buyers who have purchased this product on NovaMart can submit a review.');
+        }
+
+        if (Review::where('product_id', $product->id)->where('user_id', Auth::id())->exists()) {
+            return back()->with('error', 'You have already reviewed this product.');
         }
 
         $request->validate([

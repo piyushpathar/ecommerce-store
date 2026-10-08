@@ -36,6 +36,10 @@ class PageController extends Controller
             $validated['slug'] = Str::slug($validated['title']);
         }
 
+        if (Page::where('slug', $validated['slug'])->exists()) {
+            return back()->withInput()->withErrors(['slug' => 'A page with this URL slug already exists.']);
+        }
+
         $validated['is_published'] = $request->has('is_published');
         $validated['show_in_header'] = $request->has('show_in_header');
         $validated['show_in_footer'] = $request->has('show_in_footer');
@@ -58,7 +62,7 @@ class PageController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:200',
-            'slug' => 'required|string|max:200',
+            'slug' => 'required|string|max:200|unique:pages,slug,' . $page->id,
             'content' => 'required|string',
             'meta_title' => 'nullable|string|max:200',
             'meta_description' => 'nullable|string|max:300',

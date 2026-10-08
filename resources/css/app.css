@@ -166,3 +166,15 @@
         @apply bg-brand-50 text-brand-700 font-semibold dark:bg-brand-500/10 dark:text-brand-300;
     }
 }
+
+/* Slim scroll area for long lists inside cards */
+.nm-thin-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+.dark .nm-thin-scroll {
+    scrollbar-color: #334155 transparent;
+}
+.nm-thin-scroll::-webkit-scrollbar {
+    width: 4px;
+}
