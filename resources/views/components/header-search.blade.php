@@ -88,7 +88,7 @@
      {{ $attributes->merge(['class' => 'relative']) }}>
 
     <form action="{{ route('search.index') }}" method="GET" role="search"
-          class="flex items-stretch {{ $desktop ? 'h-11' : 'h-10' }} rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 transition-colors hover:border-slate-300 dark:hover:border-white/20 focus-within:!border-brand-500 focus-within:bg-white dark:focus-within:bg-[#0f1723] focus-within:ring-4 focus-within:ring-brand-500/10 overflow-hidden">
+          class="flex items-stretch {{ $desktop ? 'h-12' : 'h-11' }} p-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 transition-colors hover:border-slate-300 dark:hover:border-white/20 focus-within:!border-brand-500 focus-within:bg-white dark:focus-within:bg-[#0f1723] focus-within:ring-4 focus-within:ring-brand-500/10">
 
         <input type="hidden" name="category" :value="category" :disabled="!category">
 
@@ -97,21 +97,22 @@
         <button type="button"
                 @click="catOpen = !catOpen; open = false"
                 :aria-expanded="catOpen"
-                class="shrink-0 flex items-center gap-1.5 pl-3.5 pr-3 border-r border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-white/5 transition-colors">
+                class="shrink-0 flex items-center gap-1.5 pl-4 pr-3 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-200/70 dark:hover:bg-white/10 transition-colors">
             <span class="max-w-[96px] truncate" x-text="categoryName">All</span>
             <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="{ 'rotate-180': catOpen }"></i>
         </button>
         @endif
 
         <!-- Input -->
-        <label class="flex-1 min-w-0 flex items-center gap-2.5 pl-3.5 pr-2 cursor-text">
+        @if($desktop)<span class="self-center w-px h-5 bg-slate-300 dark:bg-white/15 shrink-0"></span>@endif
+        <label class="flex-1 min-w-0 flex items-center gap-2.5 {{ $desktop ? 'pl-3' : 'pl-3' }} pr-2 cursor-text">
             <i data-lucide="search" class="w-4 h-4 text-slate-400 shrink-0"></i>
             <input type="text"
                    name="q"
                    x-ref="input"
                    x-model="query"
                    @input.debounce.200ms="open = true; fetchResults()"
-                   @focus="open = true; catOpen = false"
+                   @focus="open = true; catOpen = false; if (hasQuery && !results.products.length && !results.categories.length) fetchResults()"
                    @keydown.arrow-down.prevent="move(1)"
                    @keydown.arrow-up.prevent="move(-1)"
                    @keydown.enter="choose($event)"
@@ -127,7 +128,7 @@
         <!-- Clear / shortcut hint -->
         <div class="shrink-0 flex items-center pr-2">
             <button type="button" x-show="query.length" x-cloak @click="clear()" aria-label="Clear search"
-                    class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 dark:hover:text-white dark:hover:bg-white/10 transition-colors">
+                    class="w-7 h-7 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-200/70 dark:hover:text-white dark:hover:bg-white/10 transition-colors">
                 <i data-lucide="x" class="w-3.5 h-3.5"></i>
             </button>
             @if($desktop)
@@ -136,7 +137,7 @@
         </div>
 
         <button type="submit" aria-label="Search"
-                class="shrink-0 {{ $desktop ? 'w-12' : 'w-11' }} flex items-center justify-center bg-brand-600 hover:bg-brand-500 active:bg-brand-700 text-white transition-colors">
+                class="shrink-0 aspect-square h-full rounded-full flex items-center justify-center bg-brand-600 hover:bg-brand-500 active:scale-95 text-white shadow-sm transition">
             <i data-lucide="search" class="w-4 h-4"></i>
         </button>
     </form>
@@ -144,7 +145,7 @@
     @if($desktop)
     <!-- Category scope menu (outside the form so overflow-hidden can't clip it) -->
     <div x-show="catOpen" x-cloak x-transition.opacity.duration.150ms
-         class="absolute left-0 top-full mt-2 w-60 max-h-80 overflow-y-auto nm-thin-scroll bg-white dark:bg-[#121824] rounded-2xl shadow-pop border border-slate-200 dark:border-white/10 p-1.5 z-50">
+         class="absolute left-1 top-full mt-2 w-60 max-h-80 overflow-y-auto nm-thin-scroll bg-white dark:bg-[#121824] rounded-2xl shadow-pop border border-slate-200 dark:border-white/10 p-1.5 z-50">
         <template x-for="opt in [{ slug: '', name: 'All Categories' }, ...categories]" :key="opt.slug">
             <button type="button"
                     @click="category = opt.slug; catOpen = false; $refs.input.focus()"
