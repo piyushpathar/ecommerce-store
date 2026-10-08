@@ -8,38 +8,100 @@ use App\Models\Category;
 class SearchIndexService
 {
     /**
-     * Autocomplete suggestions for header search bar
+     * Autocomplete suggestions for header search bar.
+     * Every word of the query must match the title, brand, category or SKU,
+     * so "apple watch" or "watch apple" both find "Apple Watch Ultra 2".
      */
     public function getSuggestions(string $query, int $limit = 6): array
     {
         $query = trim($query);
-        if (strlen($query) < 2) {
-            return [
-                'products' => [],
-                'categories' => [],
-            ];
+        $words = array_values(array_filter(preg_split('/\s+/', mb_strtolower($query))));
+        if (mb_strlen($query) < 2 || !$words) {
+            return ['products' => [], 'categories' => [], 'brands' => []];
         }
 
         $products = Product::where('is_active', true)
-            ->where(function ($q) use ($query) {
-                $q->where('title', 'like', "%{$query}%")
-                    ->orWhere('brand', 'like', "%{$query}%")
-                    ->orWhere('sku', 'like', "%{$query}%");
+            ->where(function ($q) use ($words) {
+                foreach ($words as $word) {
+                    // Match from the start of any word: "son" finds "Sony", not "Dyson"
+                    $word = addcslashes($word, '%_\\');
+                    $q->where(function ($w) use ($word) {
+                        foreach (['title', 'brand', 'category_name'] as $col) {
+                            $w->orWhere($col, 'like', $word . '%')
+                                ->orWhere($col, 'like', '% ' . $word . '%')
+                                ->orWhere($col, 'like', '%-' . $word . '%')
+                                ->orWhere($col, 'like', '%(' . $word . '%');
+                        }
+                        $w->orWhere('sku', 'like', '%' . $word . '%');
+                    });
+                }
             })
-            ->select(['id', 'title', 'slug', 'thumbnail', 'price', 'compare_price', 'category_name', 'brand'])
+            // Title prefix > brand prefix > best sellers
+            ->orderByRaw('CASE WHEN title LIKE ? THEN 0 WHEN brand LIKE ? THEN 1 ELSE 2 END', [$query . '%', $query . '%'])
+            ->orderByDesc('sales_count')
+            ->orderByDesc('rating_avg')
+            ->select(['id', 'title', 'slug', 'thumbnail', 'price', 'compare_price', 'category_name', 'brand', 'rating_avg'])
             ->limit($limit)
             ->get();
 
+        $brands = Product::where('is_active', true)
+            ->where(function ($q) use ($words) {
+                foreach ($words as $word) {
+                    $word = addcslashes($word, '%_\\');
+                    $q->orWhere('brand', 'like', $word . '%')
+                        ->orWhere('brand', 'like', '% ' . $word . '%');
+                }
+            })
+            ->selectRaw('brand as name, COUNT(*) as product_count')
+            ->groupBy('brand')
+            ->orderByDesc('product_count')
+            ->limit(3)
+            ->get();
+
+        $categoryNames = $products->pluck('category_name')->filter()->unique();
         $categories = Category::where('is_active', true)
-            ->where('name', 'like', "%{$query}%")
+            ->where(function ($q) use ($query, $categoryNames) {
+                $term = addcslashes($query, '%_\\');
+                $q->where('name', 'like', $term . '%')
+                    ->orWhere('name', 'like', '% ' . $term . '%')
+                    ->orWhereIn('name', $categoryNames);
+            })
             ->select(['id', 'name', 'slug', 'icon'])
-            ->limit(4)
+            ->limit(3)
             ->get();
 
         return [
             'products' => $products,
             'categories' => $categories,
+            'brands' => $brands,
         ];
+    }
+
+    /**
+     * What to show in the search dropdown before the user types:
+     * best-selling brands as quick search terms, plus top-selling products.
+     */
+    public function getTrending(): array
+    {
+        return cache()->remember('search.trending', now()->addMinutes(30), function () {
+            $terms = Product::where('is_active', true)
+                ->whereNotNull('brand')
+                ->selectRaw('brand, SUM(sales_count) as sold')
+                ->groupBy('brand')
+                ->orderByDesc('sold')
+                ->limit(8)
+                ->pluck('brand')
+                ->all();
+
+            $products = Product::where('is_active', true)
+                ->orderByDesc('sales_count')
+                ->orderByDesc('rating_avg')
+                ->limit(4)
+                ->get(['id', 'title', 'slug', 'thumbnail', 'price', 'brand', 'category_name'])
+                ->toArray();
+
+            return ['terms' => $terms, 'products' => $products];
+        });
     }
 
     /**

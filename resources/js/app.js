@@ -23,6 +23,16 @@ window.showToast = function (message, type = 'success') {
     window.dispatchEvent(new CustomEvent('notify', { detail: { message, type } }));
 };
 
+// Escape text, then bold each word of the search query inside it (for search suggestions)
+window.highlightMatch = function (text, query) {
+    const escapeHtml = (str) => String(str ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const words = String(query ?? '').trim().split(/\s+/).filter(Boolean)
+        .map((w) => escapeHtml(w).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const safe = escapeHtml(text);
+    if (!words.length) return safe;
+    return safe.replace(new RegExp(`(${words.join('|')})`, 'gi'), '<mark class="bg-transparent text-brand-600 dark:text-brand-400 font-semibold">$1</mark>');
+};
+
 // Start Alpine
 Alpine.plugin(collapse);
 Alpine.start();

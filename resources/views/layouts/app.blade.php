@@ -98,11 +98,11 @@
 
                 <!-- Search (Desktop) -->
                 @php
-                    $searchTags = array_filter(array_map('trim', explode(',', (string) \App\Models\Setting::get('search_popular_tags'))));
-                    $searchPlaceholder = \App\Models\Setting::get('search_placeholder') ?: 'Search products, brands and more';
+                    $searchTrending = app(\App\Services\SearchIndexService::class)->getTrending();
+                    $searchPlaceholder = \App\Models\Setting::get('search_placeholder') ?: 'Search for products, brands and more';
                     $searchCategories = \App\Models\Category::where('is_active', true)->orderBy('sort_order', 'asc')->get(['slug', 'name']);
                 @endphp
-                <x-header-search variant="desktop" class="hidden lg:block flex-1 max-w-3xl mx-auto" :categories="$searchCategories" :placeholder="$searchPlaceholder" :popularSearches="$searchTags" />
+                <x-header-search variant="desktop" class="hidden lg:block flex-1 max-w-3xl mx-auto" :categories="$searchCategories" :placeholder="$searchPlaceholder" :trending="$searchTrending" />
 
                 <!-- Right Action Bar: Deals, Theme, Account, Cart -->
                 <div class="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -188,7 +188,7 @@
 
             <!-- Search (Mobile & Tablet) -->
             <div class="lg:hidden pb-3">
-                <x-header-search variant="mobile" :placeholder="$searchPlaceholder" :popularSearches="$searchTags" />
+                <x-header-search variant="mobile" :placeholder="$searchPlaceholder" :trending="$searchTrending" />
             </div>
         </div>
     </header>

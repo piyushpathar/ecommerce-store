@@ -36,6 +36,7 @@ class SearchController extends Controller
         return response()->json([
             'products' => $results['products'],
             'categories' => $results['categories'],
+            'brands' => $results['brands'],
         ]);
     }
 }
