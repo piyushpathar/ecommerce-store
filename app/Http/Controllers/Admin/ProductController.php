@@ -54,7 +54,6 @@ class ProductController extends Controller
             'spec_values' => 'nullable|array',
             'is_featured' => 'nullable|boolean',
             'is_bestseller' => 'nullable|boolean',
-            'is_nifty_choice' => 'nullable|boolean',
         ]);
 
         $category = Category::findOrFail($request->input('category_id'));
@@ -92,7 +91,7 @@ class ProductController extends Controller
             'title' => $validated['title'],
             'slug' => $slug,
             'sku' => $validated['sku'] ?: 'NM-' . strtoupper(Str::random(6)),
-            'category_id' => $category->_id,
+            'category_id' => $category->id,
             'category_slug' => $category->slug,
             'category_name' => $category->name,
             'brand' => $validated['brand'],
@@ -114,8 +113,7 @@ class ProductController extends Controller
             ],
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
-            'is_nova_choice' => $request->boolean('is_nova_choice') || $request->boolean('is_nifty_choice'),
-            'is_nifty_choice' => $request->boolean('is_nova_choice') || $request->boolean('is_nifty_choice'),
+            'is_nova_choice' => $request->boolean('is_nova_choice'),
             'rating_avg' => 5.0,
             'rating_count' => 1,
             'view_count' => 0,
@@ -152,7 +150,6 @@ class ProductController extends Controller
             'tags' => 'nullable|string',
             'is_featured' => 'nullable|boolean',
             'is_bestseller' => 'nullable|boolean',
-            'is_nifty_choice' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
         ]);
 
@@ -179,7 +176,7 @@ class ProductController extends Controller
         $product->update([
             'title' => $validated['title'],
             'sku' => $validated['sku'] ?: $product->sku,
-            'category_id' => $category->_id,
+            'category_id' => $category->id,
             'category_slug' => $category->slug,
             'category_name' => $category->name,
             'brand' => $validated['brand'],
@@ -195,8 +192,7 @@ class ProductController extends Controller
             'tags' => array_values(array_unique($tags)),
             'is_featured' => $request->boolean('is_featured'),
             'is_bestseller' => $request->boolean('is_bestseller'),
-            'is_nova_choice' => $request->boolean('is_nova_choice') || $request->boolean('is_nifty_choice'),
-            'is_nifty_choice' => $request->boolean('is_nova_choice') || $request->boolean('is_nifty_choice'),
+            'is_nova_choice' => $request->boolean('is_nova_choice'),
             'is_active' => $request->boolean('is_active', true),
         ]);
 

@@ -46,7 +46,7 @@
                     <select name="category_id" required class="w-full mt-1 p-2.5 bg-white/5 border border-white/10 rounded-xl text-white">
                         <option value="">Select Category</option>
                         @foreach($categories as $cat)
-                        <option value="{{ $cat->_id }}">{{ $cat->name }}</option>
+                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                         @endforeach
                     </select>
                 </div>

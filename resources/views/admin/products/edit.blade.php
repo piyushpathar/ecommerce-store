@@ -13,7 +13,7 @@
         <a href="{{ route('admin.products.index') }}" class="text-xs text-slate-400 hover:text-white">&larr; Back to Products</a>
     </div>
 
-    <form method="POST" action="{{ route('admin.products.update', $product->_id) }}" class="space-y-6 text-xs">
+    <form method="POST" action="{{ route('admin.products.update', $product->id) }}" class="space-y-6 text-xs">
         @csrf
         @method('PUT')
 
@@ -31,7 +31,7 @@
                     <label class="font-bold text-slate-300">Category *</label>
                     <select name="category_id" required class="w-full mt-1 p-2.5 bg-white/5 border border-white/10 rounded-xl text-white">
                         @foreach($categories as $cat)
-                        <option value="{{ $cat->_id }}" {{ $product->category_id == $cat->_id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                        <option value="{{ $cat->id }}" {{ $product->category_id == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -115,7 +115,7 @@
                     <span class="text-slate-300 font-medium">Best Seller</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" name="is_nova_choice" value="1" {{ ($product->is_nova_choice ?? $product->is_nifty_choice) ? 'checked' : '' }} class="text-brand-600 rounded">
+                    <input type="checkbox" name="is_nova_choice" value="1" {{ $product->is_nova_choice ? 'checked' : '' }} class="text-brand-600 rounded">
                     <span class="text-slate-300 font-medium">Nova's Choice</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer">

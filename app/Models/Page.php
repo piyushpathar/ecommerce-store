@@ -27,9 +27,4 @@ class Page extends Model
         'show_in_footer' => 'boolean',
         'sort_order' => 'integer',
     ];
-
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
 }

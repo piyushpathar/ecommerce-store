@@ -30,7 +30,7 @@
                     <span>Fulfillment Status & Courier Tracking</span>
                 </h3>
 
-                <form action="{{ route('admin.orders.status', $order->_id) }}" method="POST" class="space-y-4 text-xs">
+                <form action="{{ route('admin.orders.status', $order->id) }}" method="POST" class="space-y-4 text-xs">
                     @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div>

@@ -47,7 +47,7 @@
             </div>
 
             <div class="mt-6 pt-4 border-t border-white/5 flex justify-end">
-                <form action="{{ route('admin.plans.destroy', $plan->_id) }}" method="POST" onsubmit="return confirm('Delete this plan?');">
+                <form action="{{ route('admin.plans.destroy', $plan->id) }}" method="POST" onsubmit="return confirm('Delete this plan?');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="text-xs text-rose-400 hover:underline">Delete</button>

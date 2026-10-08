@@ -12,11 +12,6 @@ class User extends Authenticatable
 
     protected $table = 'users';
 
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
     /**
      * The attributes that are mass assignable.
      *

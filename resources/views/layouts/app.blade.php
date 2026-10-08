@@ -226,7 +226,7 @@
                                     <div class="mb-3">
                                         <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 px-2">Matching Categories</div>
                                         <div class="grid grid-cols-2 gap-1.5">
-                                            <template x-for="cat in suggestions.categories" :key="cat._id">
+                                            <template x-for="cat in suggestions.categories" :key="cat.id">
                                                 <a :href="`/category/${cat.slug}`" class="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 text-xs font-semibold text-slate-700 dark:text-slate-200">
                                                     <i data-lucide="folder" class="w-3.5 h-3.5 text-brand-500"></i>
                                                     <span x-text="cat.name"></span>
@@ -240,7 +240,7 @@
                                     <div>
                                         <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 px-2">Products</div>
                                         <div class="space-y-1">
-                                            <template x-for="prod in suggestions.products" :key="prod._id">
+                                            <template x-for="prod in suggestions.products" :key="prod.id">
                                                 <a :href="`/product/${prod.slug}`" class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-white/5 group transition-colors">
                                                     <img :src="prod.thumbnail" class="w-10 h-10 rounded-lg object-cover bg-slate-100 dark:bg-white/5 shrink-0" alt="">
                                                     <div class="flex-1 min-w-0">

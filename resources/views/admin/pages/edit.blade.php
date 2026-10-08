@@ -45,7 +45,7 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('admin.pages.update', $page->_id) }}" class="space-y-6 text-xs">
+    <form method="POST" action="{{ route('admin.pages.update', $page->id) }}" class="space-y-6 text-xs">
         @csrf
         @method('PUT')
 

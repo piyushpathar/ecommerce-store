@@ -54,7 +54,7 @@
                             </span>
                         </td>
                         <td class="p-4 text-right font-sans">
-                            <form action="{{ route('admin.coupons.destroy', $cp->_id) }}" method="POST" onsubmit="return confirm('Delete this coupon?');" class="inline">
+                            <form action="{{ route('admin.coupons.destroy', $cp->id) }}" method="POST" onsubmit="return confirm('Delete this coupon?');" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="p-1.5 text-rose-400 hover:bg-rose-500/10 rounded-lg">

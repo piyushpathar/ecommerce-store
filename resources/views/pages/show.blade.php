@@ -23,7 +23,7 @@
         </div>
         @auth
             @if(Auth::user()->role === 'admin')
-            <a href="{{ route('admin.pages.edit', $page->_id) }}" class="px-2.5 py-1 rounded-lg bg-amber-500 text-black font-bold text-xs hover:bg-amber-400">
+            <a href="{{ route('admin.pages.edit', $page->id) }}" class="px-2.5 py-1 rounded-lg bg-amber-500 text-black font-bold text-xs hover:bg-amber-400">
                 Edit in Admin
             </a>
             @endif

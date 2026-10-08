@@ -110,7 +110,7 @@ class SettingController extends Controller
             'store_email' => Setting::get('store_email', 'support@novamart.in'),
             'store_phone' => Setting::get('store_phone', '+91 8000 999 888'),
             'store_address' => Setting::get('store_address', 'Tower 4, Horizon Tech Hub, SG Highway, Ahmedabad, Gujarat 380054'),
-            'footer_copyright' => Setting::get('footer_copyright', '© ' . date('Y') . ' NovaMart Marketplace. All rights reserved. Powered by Laravel 11 & MongoDB.'),
+            'footer_copyright' => Setting::get('footer_copyright', '© ' . date('Y') . ' NovaMart Marketplace. All rights reserved. Powered by Laravel 11 & MySQL.'),
             'payment_methods_text' => Setting::get('payment_methods_text', '⚡ UPI / Cards / NetBanking / EMI · 100% Brand Sealed Delivery'),
             'social_instagram' => Setting::get('social_instagram', 'https://instagram.com'),
             'social_twitter' => Setting::get('social_twitter', 'https://twitter.com'),

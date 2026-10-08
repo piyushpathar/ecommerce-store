@@ -28,7 +28,6 @@ class Product extends Model
         'is_featured',
         'is_bestseller',
         'is_nova_choice',
-        'is_nifty_choice',
         'rating_avg',
         'rating_count',
         'specifications',
@@ -50,7 +49,6 @@ class Product extends Model
         'is_featured' => 'boolean',
         'is_bestseller' => 'boolean',
         'is_nova_choice' => 'boolean',
-        'is_nifty_choice' => 'boolean',
         'is_active' => 'boolean',
         'images' => 'array',
         'specifications' => 'array',
@@ -60,16 +58,6 @@ class Product extends Model
         'view_count' => 'integer',
         'sales_count' => 'integer',
     ];
-
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
-    public function getIsNovaChoiceAttribute(): bool
-    {
-        return (bool) ($this->attributes['is_nova_choice'] ?? $this->attributes['is_nifty_choice'] ?? false);
-    }
 
     public function category()
     {

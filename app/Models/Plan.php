@@ -32,11 +32,6 @@ class Plan extends Model
         'features' => 'array',
     ];
 
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
     public function orders()
     {
         return $this->hasMany(Order::class, 'plan_id');

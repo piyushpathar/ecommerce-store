@@ -72,7 +72,7 @@
         <!-- Left: Image Gallery (5 cols) -->
         <div class="lg:col-span-5 space-y-4">
             <div class="relative aspect-square rounded-3xl bg-white dark:bg-[#0f1723] p-6 border border-slate-200 dark:border-white/10 shadow-soft overflow-hidden flex items-center justify-center">
-                @if($product->is_nova_choice ?? $product->is_nifty_choice)
+                @if($product->is_nova_choice)
                 <div class="absolute top-4 left-4 z-10 bg-brand-600 text-white text-[11px] font-bold font-mono px-2.5 py-1 rounded-full uppercase tracking-wider">
                     Nova's Choice
                 </div>
@@ -204,7 +204,7 @@
                     <!-- Add to Cart Form -->
                     <form action="{{ route('cart.add') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->_id }}">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <input type="hidden" name="variant" :value="selectedVariant">
                         <input type="hidden" name="quantity" value="1">
                         <button type="submit" class="w-full py-3.5 rounded-2xl bg-brand-50 hover:bg-brand-100 dark:bg-brand-950/60 dark:hover:bg-brand-900/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 font-bold text-xs shadow-soft transition-all flex items-center justify-center gap-2">
@@ -216,7 +216,7 @@
                     <!-- Buy Now Direct Checkout Form -->
                     <form action="{{ route('cart.add') }}" method="POST">
                         @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->_id }}">
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <input type="hidden" name="variant" :value="selectedVariant">
                         <input type="hidden" name="quantity" value="1">
                         <button type="submit" class="w-full py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-glow transition-all flex items-center justify-center gap-2">

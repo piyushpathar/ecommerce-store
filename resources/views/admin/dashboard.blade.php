@@ -106,7 +106,7 @@
                             </td>
                             <td class="py-3 text-slate-400 text-[11px]">{{ $ro->created_at->format('d M, h:i A') }}</td>
                             <td class="py-3 text-right font-sans">
-                                <a href="{{ route('admin.orders.show', $ro->_id) }}" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-600 text-slate-200 hover:text-white text-[11px] font-semibold transition-colors">
+                                <a href="{{ route('admin.orders.show', $ro->id) }}" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-600 text-slate-200 hover:text-white text-[11px] font-semibold transition-colors">
                                     Manage
                                 </a>
                             </td>

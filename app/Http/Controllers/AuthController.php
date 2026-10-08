@@ -189,8 +189,8 @@ class AuthController extends Controller
             return redirect()->route('login')->with('error', 'Google Sign-In is disabled.');
         }
 
-        $email = $request->input('email', 'trader.pro@gmail.com');
-        $name = $request->input('name', 'Google Trader');
+        $email = $request->input('email', 'demo.user@gmail.com');
+        $name = $request->input('name', 'Google User');
 
         $user = User::where('email', $email)->first();
 

@@ -63,7 +63,7 @@
                             </div>
                         </td>
                         <td class="py-3.5 px-4">
-                            <form action="{{ route('admin.pages.toggle', $p->_id) }}" method="POST">
+                            <form action="{{ route('admin.pages.toggle', $p->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all cursor-pointer {{ $p->is_published ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25' : 'bg-slate-700/40 text-slate-400 border border-slate-600/30 hover:bg-slate-700/60' }}">
                                     {{ $p->is_published ? '● Published' : '○ Draft' }}
@@ -78,10 +78,10 @@
                                 <a href="{{ route('pages.show', $p->slug) }}" target="_blank" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors" title="View Public Page">
                                     <i data-lucide="eye" class="w-4 h-4"></i>
                                 </a>
-                                <a href="{{ route('admin.pages.edit', $p->_id) }}" class="p-1.5 rounded-lg text-brand-400 hover:bg-brand-500/15 transition-colors" title="Edit Page Content">
+                                <a href="{{ route('admin.pages.edit', $p->id) }}" class="p-1.5 rounded-lg text-brand-400 hover:bg-brand-500/15 transition-colors" title="Edit Page Content">
                                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                                 </a>
-                                <form action="{{ route('admin.pages.destroy', $p->_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this page?');" class="inline">
+                                <form action="{{ route('admin.pages.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this page?');" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/15 transition-colors" title="Delete Page">

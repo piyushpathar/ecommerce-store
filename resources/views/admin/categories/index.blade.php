@@ -54,7 +54,7 @@
                         </td>
                         <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <form action="{{ route('admin.categories.destroy', $cat->_id) }}" method="POST" onsubmit="return confirm('Delete this category?');">
+                                <form action="{{ route('admin.categories.destroy', $cat->id) }}" method="POST" onsubmit="return confirm('Delete this category?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors" title="Delete">

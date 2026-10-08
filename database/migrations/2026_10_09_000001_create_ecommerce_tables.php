@@ -48,7 +48,6 @@ return new class extends Migration
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_bestseller')->default(false);
             $table->boolean('is_nova_choice')->default(false);
-            $table->boolean('is_nifty_choice')->default(false);
             $table->decimal('rating_avg', 3, 2)->default(0);
             $table->integer('rating_count')->default(0);
             $table->json('specifications')->nullable();

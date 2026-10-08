@@ -72,10 +72,10 @@
                         </td>
                         <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="{{ route('admin.products.edit', $p->_id) }}" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors" title="Edit">
+                                <a href="{{ route('admin.products.edit', $p->id) }}" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors" title="Edit">
                                     <i data-lucide="edit-2" class="w-4 h-4"></i>
                                 </a>
-                                <form action="{{ route('admin.products.destroy', $p->_id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <form action="{{ route('admin.products.destroy', $p->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 transition-colors" title="Delete">

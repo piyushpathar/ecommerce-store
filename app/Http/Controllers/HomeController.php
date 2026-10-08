@@ -28,13 +28,9 @@ class HomeController extends Controller
             ->get();
 
         $novaChoices = Product::where('is_active', true)
-            ->where(function($q) {
-                $q->where('is_nova_choice', true)->orWhere('is_nifty_choice', true);
-            })
+            ->where('is_nova_choice', true)
             ->limit(8)
             ->get();
-
-        $niftyChoices = $novaChoices; // backwards-compatible alias
 
         $newArrivals = Product::where('is_active', true)
             ->orderBy('created_at', 'desc')
@@ -107,7 +103,6 @@ class HomeController extends Controller
             'fashion',
             'homeProducts',
             'novaChoices',
-            'niftyChoices',
             'newArrivals',
             'reviews',
             'announcement'

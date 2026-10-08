@@ -65,13 +65,13 @@
                         <td class="p-4 text-slate-400 font-mono text-[11px]">{{ $u->created_at->format('d M Y') }}</td>
                         <td class="p-4 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <form action="{{ route('admin.users.toggle.role', $u->_id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.users.toggle.role', $u->id) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-[10px] text-slate-300 transition-colors">
                                         {{ $u->role === 'admin' ? 'Revoke Admin' : 'Make Admin' }}
                                     </button>
                                 </form>
-                                <form action="{{ route('admin.users.toggle.status', $u->_id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.users.toggle.status', $u->id) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="px-2 py-1 rounded {{ $u->is_active ? 'bg-rose-500/10 text-rose-400 hover:bg-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20' }} text-[10px] transition-colors">
                                         {{ $u->is_active ? 'Disable' : 'Enable' }}

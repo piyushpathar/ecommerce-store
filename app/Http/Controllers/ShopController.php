@@ -56,12 +56,12 @@ class ShopController extends Controller
         $product->increment('view_count');
 
         $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('_id', '!=', $product->_id)
+            ->where('id', '!=', $product->id)
             ->where('is_active', true)
             ->limit(4)
             ->get();
 
-        $reviews = Review::where('product_id', $product->_id)
+        $reviews = Review::where('product_id', $product->id)
             ->where('is_approved', true)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -79,7 +79,7 @@ class ShopController extends Controller
         $hasPurchased = false;
         if (Auth::check()) {
             $hasPurchased = \App\Models\Order::where('user_id', Auth::id())
-                ->where('items.product_id', (string) $product->_id)
+                ->whereJsonContains('items', ['product_id' => $product->id])
                 ->exists();
         }
 
@@ -95,7 +95,7 @@ class ShopController extends Controller
         }
 
         $hasPurchased = \App\Models\Order::where('user_id', Auth::id())
-            ->where('items.product_id', (string) $product->_id)
+            ->whereJsonContains('items', ['product_id' => $product->id])
             ->exists();
 
         if (!$hasPurchased) {
@@ -112,7 +112,7 @@ class ShopController extends Controller
         $userId = Auth::id();
 
         Review::create([
-            'product_id' => $product->_id,
+            'product_id' => $product->id,
             'user_id' => $userId,
             'user_name' => $userName,
             'rating' => (int) $request->input('rating'),
@@ -123,7 +123,7 @@ class ShopController extends Controller
         ]);
 
         // Recalculate average rating
-        $reviews = Review::where('product_id', $product->_id)->where('is_approved', true)->get();
+        $reviews = Review::where('product_id', $product->id)->where('is_approved', true)->get();
         $avg = $reviews->avg('rating');
         $product->update([
             'rating_avg' => round($avg, 1),

@@ -30,11 +30,6 @@ class Coupon extends Model
         'is_active' => 'boolean',
     ];
 
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
     public function isValid(float $subtotal): array
     {
         if (!$this->is_active) {

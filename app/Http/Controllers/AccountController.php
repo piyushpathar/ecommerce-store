@@ -16,7 +16,7 @@ class AccountController extends Controller
         $user = Auth::user();
         $tab = $request->query('tab', 'orders');
 
-        $orders = Order::where('user_id', $user->_id)
+        $orders = Order::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
 

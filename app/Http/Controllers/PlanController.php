@@ -34,7 +34,7 @@ class PlanController extends Controller
         $rpOrder = $this->razorpayService->createOrder(
             $plan->price,
             $receipt,
-            ['plan_id' => (string) $plan->_id, 'user_id' => $user ? (string) $user->_id : 'guest']
+            ['plan_id' => (string) $plan->id, 'user_id' => $user ? (string) $user->id : 'guest']
         );
 
         return view('plans.checkout', [

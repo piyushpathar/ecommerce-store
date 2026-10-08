@@ -16,7 +16,7 @@
             <span class="bg-amber-500 text-slate-950 font-bold text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded shadow-xs uppercase tracking-wider">
                 Hot
             </span>
-            @elseif($prod->is_nova_choice ?? $prod->is_nifty_choice)
+            @elseif($prod->is_nova_choice)
             <span class="bg-brand-600 text-white font-bold text-[8px] sm:text-[9px] px-1.5 py-0.5 rounded shadow-xs uppercase tracking-wider">
                 Choice
             </span>
@@ -70,7 +70,7 @@
 
             <form action="{{ route('cart.add') }}" method="POST" class="shrink-0">
                 @csrf
-                <input type="hidden" name="product_id" value="{{ $prod->_id }}">
+                <input type="hidden" name="product_id" value="{{ $prod->id }}">
                 <button type="submit" 
                         class="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white dark:bg-brand-950/60 dark:hover:bg-brand-500 dark:text-brand-400 dark:hover:text-white border border-brand-200 dark:border-brand-800 transition-all flex items-center justify-center shadow-2xs group/btn" 
                         title="Add to Cart">

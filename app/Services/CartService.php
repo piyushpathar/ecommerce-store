@@ -20,13 +20,13 @@ class CartService
     public function add(Product $product, int $quantity = 1, ?string $variant = null): array
     {
         $cart = $this->getItems();
-        $itemKey = $product->_id . ($variant ? '_' . md5($variant) : '');
+        $itemKey = $product->id . ($variant ? '_' . md5($variant) : '');
 
         if (isset($cart[$itemKey])) {
             $cart[$itemKey]['quantity'] += $quantity;
         } else {
             $cart[$itemKey] = [
-                'product_id' => (string) $product->_id,
+                'product_id' => $product->id,
                 'title' => $product->title,
                 'slug' => $product->slug,
                 'sku' => $product->sku,

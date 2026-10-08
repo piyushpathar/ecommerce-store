@@ -25,11 +25,6 @@ class Review extends Model
         'is_approved' => 'boolean',
     ];
 
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');

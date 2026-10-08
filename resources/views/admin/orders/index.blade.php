@@ -70,7 +70,7 @@
                     @forelse($orders as $o)
                     <tr class="hover:bg-white/[0.01] transition-colors">
                         <td class="p-4 font-mono font-bold text-white">
-                            <a href="{{ route('admin.orders.show', $o->_id) }}" class="hover:text-brand-400">{{ $o->order_number }}</a>
+                            <a href="{{ route('admin.orders.show', $o->id) }}" class="hover:text-brand-400">{{ $o->order_number }}</a>
                         </td>
                         <td class="p-4">
                             <div class="font-bold text-slate-200">{{ $o->customer_name }}</div>
@@ -90,7 +90,7 @@
                         </td>
                         <td class="p-4 text-slate-400 font-mono text-[11px]">{{ $o->created_at->format('d M, h:i A') }}</td>
                         <td class="p-4 text-right">
-                            <a href="{{ route('admin.orders.show', $o->_id) }}" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-brand-600 text-slate-200 hover:text-white font-bold transition-colors inline-block">
+                            <a href="{{ route('admin.orders.show', $o->id) }}" class="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-brand-600 text-slate-200 hover:text-white font-bold transition-colors inline-block">
                                 View & Fulfill
                             </a>
                         </td>

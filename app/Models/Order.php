@@ -48,11 +48,6 @@ class Order extends Model
         'is_subscription' => 'boolean',
     ];
 
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

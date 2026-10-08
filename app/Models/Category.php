@@ -29,11 +29,6 @@ class Category extends Model
         'sort_order' => 'integer',
     ];
 
-    public function get_idAttribute()
-    {
-        return (string) $this->id;
-    }
-
     public function products()
     {
         return $this->hasMany(Product::class, 'category_id');
