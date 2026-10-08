@@ -17,11 +17,12 @@ class RazorpayService
 
     public function __construct()
     {
-        $this->keyId = Setting::get('razorpay_key_id', config('services.razorpay.key_id', env('RAZORPAY_KEY_ID')));
-        $this->keySecret = Setting::get('razorpay_key_secret', config('services.razorpay.key_secret', env('RAZORPAY_KEY_SECRET')));
-        $this->webhookSecret = Setting::get('razorpay_webhook_secret', env('RAZORPAY_WEBHOOK_SECRET'));
-        $this->enabled = (bool) Setting::get('razorpay_enabled', true);
-        $this->mockMode = (bool) Setting::get('razorpay_mock_mode', true);
+        $this->keyId = Setting::get('razorpay_key_id');
+        $this->keySecret = Setting::get('razorpay_key_secret');
+        $this->webhookSecret = Setting::get('razorpay_webhook_secret');
+        $this->enabled = Setting::get('razorpay_enabled') === '1';
+        // Mock payments are never allowed in production
+        $this->mockMode = Setting::get('razorpay_mock_mode') === '1' && !app()->environment('production');
     }
 
     public function isEnabled(): bool
@@ -31,7 +32,7 @@ class RazorpayService
 
     public function getKeyId(): string
     {
-        return $this->keyId ?: 'rzp_test_NovaMart2026';
+        return (string) $this->keyId;
     }
 
     public function getWebhookSecret(): ?string
@@ -75,8 +76,13 @@ class RazorpayService
                     'mock' => false,
                 ];
             } catch (Exception $e) {
-                Log::warning('Razorpay API error, falling back to local sandbox simulator: ' . $e->getMessage());
+                Log::error('Razorpay order creation failed: ' . $e->getMessage());
+                throw new \RuntimeException('Unable to start online payment. Please try again or choose Cash on Delivery.');
             }
+        }
+
+        if (!$this->mockMode) {
+            throw new \RuntimeException('Online payments are not configured. Please choose Cash on Delivery.');
         }
 
         // Mock Order fallback
@@ -94,8 +100,8 @@ class RazorpayService
      */
     public function verifySignature(string $razorpayOrderId, string $razorpayPaymentId, string $signature): bool
     {
-        if ($this->mockMode || str_starts_with($razorpayOrderId, 'order_')) {
-            // In mock mode or mock order, check if payment id is provided
+        if ($this->mockMode) {
+            // Mock mode (never in production): no real gateway to verify against
             return !empty($razorpayPaymentId);
         }
 

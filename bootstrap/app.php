@@ -17,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'webhook/*',
         ]);
 
+        $middleware->web(append: [
+            \App\Http\Middleware\EnsureUserIsActive::class,
+        ]);
+
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);

@@ -7,25 +7,25 @@
 <div class="max-w-[1440px] mx-auto px-2.5 sm:px-4 lg:px-8 py-2 sm:py-4 space-y-3.5 sm:space-y-5">
 
     <!-- 1. Visual Category Navigation Strip -->
-    @if(\App\Models\Setting::get('section_categories_strip_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_categories_strip_enabled') == '1')
     <x-category-strip :categories="$categories" />
     @endif
 
     <!-- 2. Hero Promotional Deals Image Carousel -->
-    @if(\App\Models\Setting::get('section_hero_carousel_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_hero_carousel_enabled') == '1' && count(\App\Models\Setting::json('hero_slides')))
     <x-hero-carousel />
     @endif
 
     <!-- 3. SECTION: Deals of the Day (Dense Product Grid) -->
-    @if(\App\Models\Setting::get('section_deals_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_deals_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-rose-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                    <span>{{ \App\Models\Setting::get('deals_title', '⚡ Deals of the Day') }}</span>
+                    <span>{{ \App\Models\Setting::get('deals_title') }}</span>
                     <span class="hidden sm:inline-flex items-center text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
-                        {{ \App\Models\Setting::get('deals_subtitle', 'Limited Time Offers') }}
+                        {{ \App\Models\Setting::get('deals_subtitle') }}
                     </span>
                 </h2>
             </div>
@@ -44,14 +44,15 @@
     @endif
 
     <!-- 4. SECTION: Smartphones & Flagship Devices -->
-    @if(\App\Models\Setting::get('section_mobiles_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_mobiles_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-brand-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
-                    {{ \App\Models\Setting::get('mobiles_title', 'Smartphones & Flagship Devices') }}
+                    {{ \App\Models\Setting::get('mobiles_title') }}
                 </h2>
+                <span class="hidden md:inline text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ \App\Models\Setting::get('mobiles_subtitle') }}</span>
             </div>
             <a href="{{ route('shop.category', 'smartphones-tablets') }}" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                 <span>View All Mobiles</span>
@@ -68,14 +69,15 @@
     @endif
 
     <!-- 5. SECTION: Clothing & Fashion Apparel -->
-    @if(\App\Models\Setting::get('section_clothing_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_clothing_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-emerald-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
-                    {{ \App\Models\Setting::get('clothing_title', 'Clothing & Trendsetting Fashion') }}
+                    {{ \App\Models\Setting::get('clothing_title') }}
                 </h2>
+                <span class="hidden md:inline text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ \App\Models\Setting::get('clothing_subtitle') }}</span>
             </div>
             <a href="{{ route('shop.category', 'clothing-fashion') }}" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                 <span>View All Clothing</span>
@@ -92,14 +94,15 @@
     @endif
 
     <!-- 6. SECTION: Home & Kitchen Appliances -->
-    @if(\App\Models\Setting::get('section_appliances_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_appliances_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-amber-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
-                    {{ \App\Models\Setting::get('appliances_title', 'Home & Kitchen Appliances') }}
+                    {{ \App\Models\Setting::get('appliances_title') }}
                 </h2>
+                <span class="hidden md:inline text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ \App\Models\Setting::get('appliances_subtitle') }}</span>
             </div>
             <a href="{{ route('shop.category', 'home-appliances') }}" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                 <span>View All Appliances</span>
@@ -116,14 +119,15 @@
     @endif
 
     <!-- 7. SECTION: Laptops & Pro Displays -->
-    @if(\App\Models\Setting::get('section_laptops_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_laptops_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-blue-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
-                    {{ \App\Models\Setting::get('laptops_title', 'Laptops & Pro Displays') }}
+                    {{ \App\Models\Setting::get('laptops_title') }}
                 </h2>
+                <span class="hidden md:inline text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ \App\Models\Setting::get('laptops_subtitle') }}</span>
             </div>
             <a href="{{ route('shop.category', 'laptops-monitors') }}" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                 <span>View All Computers</span>
@@ -140,14 +144,15 @@
     @endif
 
     <!-- 8. SECTION: Audio & Wearables -->
-    @if(\App\Models\Setting::get('section_audio_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_audio_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-teal-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
-                    {{ \App\Models\Setting::get('audio_title', 'Audio & Wearables') }}
+                    {{ \App\Models\Setting::get('audio_title') }}
                 </h2>
+                <span class="hidden md:inline text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ \App\Models\Setting::get('audio_subtitle') }}</span>
             </div>
             <a href="{{ route('shop.category', 'audio-wearables') }}" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                 <span>View All Audio</span>
@@ -164,14 +169,15 @@
     @endif
 
     <!-- 9. SECTION: Footwear & Sneakers -->
-    @if(\App\Models\Setting::get('section_footwear_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_footwear_enabled') == '1')
     <section class="bg-white dark:bg-[#0f1723] rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-slate-200 dark:border-white/10 shadow-soft space-y-3">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-white/10">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-5 rounded-full bg-purple-500"></div>
                 <h2 class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-tight">
-                    {{ \App\Models\Setting::get('footwear_title', 'Trending Footwear & Sneakers') }}
+                    {{ \App\Models\Setting::get('footwear_title') }}
                 </h2>
+                <span class="hidden md:inline text-[11px] text-slate-500 dark:text-slate-400 truncate">{{ \App\Models\Setting::get('footwear_subtitle') }}</span>
             </div>
             <a href="{{ route('shop.category', 'footwear-sneakers') }}" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1">
                 <span>View All Footwear</span>
@@ -188,18 +194,9 @@
     @endif
 
     <!-- 10. Compact Customer Assurance Strip -->
-    @if(\App\Models\Setting::get('section_assurance_enabled', '1') == '1')
+    @if(\App\Models\Setting::get('section_assurance_enabled') == '1')
     @php
-        $assuranceJson = \App\Models\Setting::get('assurance_items');
-        $assuranceCards = $assuranceJson ? json_decode($assuranceJson, true) : null;
-        if (empty($assuranceCards) || !is_array($assuranceCards)) {
-            $assuranceCards = [
-                ['title' => '100% Genuine', 'desc' => 'Official Brand Sealed', 'icon' => 'shield-check'],
-                ['title' => 'Free Delivery', 'desc' => 'On orders above ₹499', 'icon' => 'truck'],
-                ['title' => '7-Day Replacement', 'desc' => 'Hassle-free policy', 'icon' => 'refresh-cw'],
-                ['title' => 'Razorpay Secured', 'desc' => 'UPI, Cards & NetBanking', 'icon' => 'lock'],
-            ];
-        }
+        $assuranceCards = \App\Models\Setting::json('assurance_items');
         $colors = [
             ['bg' => 'bg-brand-50 dark:bg-brand-950/60', 'text' => 'text-brand-600 dark:text-brand-400'],
             ['bg' => 'bg-blue-50 dark:bg-blue-950/60', 'text' => 'text-blue-600 dark:text-blue-400'],

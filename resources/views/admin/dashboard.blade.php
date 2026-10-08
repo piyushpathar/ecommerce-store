@@ -32,7 +32,7 @@
                 {{ $totalOrders }}
             </div>
             <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-400 font-mono">
-                <span>Across physical & signals</span>
+                <span>All-time store orders</span>
             </div>
         </div>
 

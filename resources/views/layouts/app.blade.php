@@ -52,8 +52,8 @@
       }">
 
     <!-- Announcement Bar -->
-    @if(\App\Models\Setting::get('announcement_enabled', '1') == '1' && ($announcement = \App\Models\Setting::get('announcement_bar', '⚡ MEGA SALE FESTIVAL: Flat 10% Off with Code NOVAMART10 · Free 1-Day Express Delivery Across India')))
-    <div class="relative bg-gradient-to-r {{ \App\Models\Setting::get('announcement_bg', 'from-brand-800 via-brand-600 to-teal-700') }} text-white text-xs py-2 px-4 text-center font-medium shadow-xs">
+    @if(\App\Models\Setting::get('announcement_enabled') == '1' && ($announcement = \App\Models\Setting::get('announcement_bar')))
+    <div class="relative bg-gradient-to-r {{ \App\Models\Setting::get('announcement_bg') }} text-white text-xs py-2 px-4 text-center font-medium shadow-xs">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
             <span>{{ $announcement }}</span>
         </div>
@@ -70,16 +70,16 @@
                 <div class="flex items-center gap-4 lg:gap-6 shrink-0">
                     <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-2.5 group">
                         @if($logoImg = \App\Models\Setting::get('logo_image_url'))
-                            <img src="{{ $logoImg }}" alt="{{ \App\Models\Setting::get('store_name', 'NovaMart') }}" class="h-8 sm:h-10 object-contain">
+                            <img src="{{ $logoImg }}" alt="{{ \App\Models\Setting::get('store_name') }}" class="h-8 sm:h-10 object-contain">
                         @else
-                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr {{ \App\Models\Setting::get('site_icon_gradient', 'from-brand-600 to-teal-400') }} flex items-center justify-center text-white font-mono font-black text-base sm:text-xl shadow-glow group-hover:scale-105 transition-transform">
-                                {{ \App\Models\Setting::get('site_icon_text', 'NM') }}
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr {{ \App\Models\Setting::get('site_icon_gradient') }} flex items-center justify-center text-white font-mono font-black text-base sm:text-xl shadow-glow group-hover:scale-105 transition-transform">
+                                {{ \App\Models\Setting::get('site_icon_text') }}
                             </div>
                             <div class="flex flex-col">
                                 <span class="font-extrabold text-base sm:text-xl tracking-tight text-ink dark:text-white flex items-center">
-                                    {{ \App\Models\Setting::get('logo_text_prefix', 'NOVA') }}<span class="text-brand-500">{{ \App\Models\Setting::get('logo_text_highlight', 'MART') }}</span>
+                                    {{ \App\Models\Setting::get('logo_text_prefix') }}<span class="text-brand-500">{{ \App\Models\Setting::get('logo_text_highlight') }}</span>
                                 </span>
-                                <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide -mt-0.5 hidden sm:block">{{ \App\Models\Setting::get('logo_subtitle', 'Marketplace') }}</span>
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide -mt-0.5 hidden sm:block">{{ \App\Models\Setting::get('logo_subtitle') }}</span>
                             </div>
                         @endif
                     </a>
@@ -113,8 +113,7 @@
 
                     <!-- Dynamic Header Navigation Links -->
                     @php
-                        $headerMenuJson = \App\Models\Setting::get('header_menu_items');
-                        $headerNavItems = $headerMenuJson ? json_decode($headerMenuJson, true) : null;
+                        $headerNavItems = \App\Models\Setting::json('header_menu_items');
                         $headerPages = \App\Models\Page::where('is_published', true)->where('show_in_header', true)->orderBy('sort_order', 'asc')->get();
                     @endphp
                     @if(!empty($headerNavItems) && is_array($headerNavItems))
@@ -138,9 +137,9 @@
 
                 <!-- Global Custom Combobox Search Bar (Desktop) -->
                 @php
-                    $searchTagsString = \App\Models\Setting::get('search_popular_tags', 'iPhone 16 Pro, MacBook Pro M4, Sony WH-1000XM5, Nike Air Jordan, Dyson V15');
+                    $searchTagsString = \App\Models\Setting::get('search_popular_tags');
                     $searchTags = array_filter(array_map('trim', explode(',', $searchTagsString)));
-                    $searchPlaceholder = \App\Models\Setting::get('search_placeholder', 'Search smartphones, laptops, audio, fashion...');
+                    $searchPlaceholder = \App\Models\Setting::get('search_placeholder');
                 @endphp
                 <div class="hidden lg:block flex-1 max-w-2xl relative" x-data="{
                     selectedCategory: '',
@@ -359,10 +358,12 @@
                                     <span>Create Account</span>
                                 </a>
                                 <div class="border-t border-slate-100 dark:border-white/5 my-1"></div>
+                                @if(\App\Models\Setting::get('google_login_enabled') === '1')
                                 <a href="{{ route('auth.google') }}" class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5">
                                     <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27A7.19 7.19 0 0 1 4.9 12c0-.79.14-1.57.38-2.27V6.58H1.25A11.97 11.97 0 0 0 0 12c0 1.92.45 3.74 1.25 5.42l4.03-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
                                     <span>Gmail 1-Click Login</span>
                                 </a>
+                                @endif
                             @endauth
                         </div>
                     </div>
@@ -426,23 +427,23 @@
                 <div class="lg:col-span-2 space-y-4">
                     <div class="flex items-center gap-2.5">
                         @if($footerLogoImg = \App\Models\Setting::get('logo_image_url'))
-                            <img src="{{ $footerLogoImg }}" alt="{{ \App\Models\Setting::get('store_name', 'NovaMart') }}" class="h-8 object-contain">
+                            <img src="{{ $footerLogoImg }}" alt="{{ \App\Models\Setting::get('store_name') }}" class="h-8 object-contain">
                         @else
-                            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr {{ \App\Models\Setting::get('site_icon_gradient', 'from-brand-600 to-teal-400') }} flex items-center justify-center text-white font-mono font-black text-base shadow-glow">
-                                {{ \App\Models\Setting::get('site_icon_text', 'NM') }}
+                            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr {{ \App\Models\Setting::get('site_icon_gradient') }} flex items-center justify-center text-white font-mono font-black text-base shadow-glow">
+                                {{ \App\Models\Setting::get('site_icon_text') }}
                             </div>
                             <span class="font-extrabold text-xl tracking-tight text-ink dark:text-white">
-                                {{ \App\Models\Setting::get('logo_text_prefix', 'NOVA') }}<span class="text-brand-500">{{ \App\Models\Setting::get('logo_text_highlight', 'MART') }}</span>
+                                {{ \App\Models\Setting::get('logo_text_prefix') }}<span class="text-brand-500">{{ \App\Models\Setting::get('logo_text_highlight') }}</span>
                             </span>
                         @endif
                     </div>
                     <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">
-                        {{ \App\Models\Setting::get('store_tagline', 'India\'s Premier Online Marketplace for Flagship Smartphones, Creator Laptops, Audio & Smart Living.') }}
+                        {{ \App\Models\Setting::get('store_tagline') }}
                     </p>
                     <div class="space-y-1 text-xs text-slate-500 dark:text-slate-400">
                         <p class="flex items-center gap-2">
                             <i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-500 shrink-0"></i>
-                            <span>{{ \App\Models\Setting::get('store_address', 'Tower 4, Horizon Tech Hub, SG Highway, Ahmedabad, Gujarat 380054') }}</span>
+                            <span>{{ \App\Models\Setting::get('store_address') }}</span>
                         </p>
                     </div>
                     <div class="flex items-center gap-3 pt-1 text-slate-400">
@@ -482,8 +483,8 @@
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">Customer Care</h4>
                     <ul class="space-y-2.5 text-xs text-slate-600 dark:text-slate-400">
                         <li><a href="{{ route('account.index', ['tab' => 'orders']) }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Track Orders</a></li>
-                        <li><a href="mailto:{{ \App\Models\Setting::get('store_email', 'support@novamart.in') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Email: {{ \App\Models\Setting::get('store_email', 'support@novamart.in') }}</a></li>
-                        <li><a href="tel:{{ \App\Models\Setting::get('store_phone', '+91 8000 999 888') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors font-mono">Helpline: {{ \App\Models\Setting::get('store_phone', '+91 8000 999 888') }}</a></li>
+                        <li><a href="mailto:{{ \App\Models\Setting::get('store_email') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Email: {{ \App\Models\Setting::get('store_email') }}</a></li>
+                        <li><a href="tel:{{ \App\Models\Setting::get('store_phone') }}" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors font-mono">Helpline: {{ \App\Models\Setting::get('store_phone') }}</a></li>
                     </ul>
 
                     <!-- Dynamic Social Media Links -->
@@ -509,9 +510,9 @@
 
             <!-- Bottom Strip -->
             <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-500">
-                <p>{{ \App\Models\Setting::get('footer_copyright', '© ' . date('Y') . ' NovaMart Marketplace. All rights reserved. Powered by Laravel 11 & MySQL Enterprise.') }}</p>
+                <p>{{ str_replace('{year}', date('Y'), \App\Models\Setting::get('footer_copyright')) }}</p>
                 <div class="flex items-center gap-4 text-xs font-mono">
-                    <span>{{ \App\Models\Setting::get('payment_methods_text', '⚡ UPI / Cards / NetBanking / EMI · 100% Brand Sealed Delivery') }}</span>
+                    <span>{{ \App\Models\Setting::get('payment_methods_text') }}</span>
                 </div>
             </div>
         </div>

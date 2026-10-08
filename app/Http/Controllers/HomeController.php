@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Plan;
 use App\Models\Review;
 use App\Models\Setting;
 use Illuminate\Http\Request;
@@ -86,7 +85,7 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
-        $announcement = Setting::get('announcement_bar', '⚡ MEGA SALE FESTIVAL: Flat 10% Off with Code NOVAMART10 · Free 1-Day Express Delivery Across India');
+        $announcement = Setting::get('announcement_bar');
 
         return view('home', compact(
             'categories',

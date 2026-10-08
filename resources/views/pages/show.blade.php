@@ -131,11 +131,11 @@
                 <div class="pt-2 border-t border-white/10 space-y-1 font-mono text-xs">
                     <div class="flex items-center gap-2 text-brand-400 font-bold">
                         <i data-lucide="phone" class="w-3.5 h-3.5"></i>
-                        <span>{{ \App\Models\Setting::get('store_phone', '+91 8000 999 888') }}</span>
+                        <span>{{ \App\Models\Setting::get('store_phone') }}</span>
                     </div>
                     <div class="flex items-center gap-2 text-slate-300">
                         <i data-lucide="mail" class="w-3.5 h-3.5"></i>
-                        <span>{{ \App\Models\Setting::get('store_email', 'support@novamart.in') }}</span>
+                        <span>{{ \App\Models\Setting::get('store_email') }}</span>
                     </div>
                 </div>
             </div>

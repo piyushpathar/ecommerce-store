@@ -197,6 +197,20 @@
                     <label class="font-bold text-slate-300 block mb-1">Announcement Message *</label>
                     <input type="text" name="announcement_bar" x-model="announcementText" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-xs">
                 </div>
+
+                <div>
+                    <label class="font-bold text-slate-300 block mb-1">Banner Background</label>
+                    <select name="announcement_bg" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-xs">
+                        @foreach([
+                            'from-brand-800 via-brand-600 to-teal-700' => 'Emerald to Teal (Default)',
+                            'from-indigo-800 via-indigo-600 to-violet-700' => 'Indigo to Violet',
+                            'from-rose-700 via-rose-600 to-amber-600' => 'Rose to Amber',
+                            'from-slate-900 via-slate-800 to-slate-900' => 'Dark Slate',
+                        ] as $value => $label)
+                            <option value="{{ $value }}" {{ $settings['announcement_bg'] === $value ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <div class="p-6 rounded-3xl bg-[#0c1117] border border-white/10 shadow-soft space-y-4">
@@ -229,6 +243,31 @@
 
         <!-- TAB 4: Homepage Sections & Carousel Banners -->
         <div x-show="activeTab === 'homepage'" x-cloak class="space-y-6">
+            <div class="p-6 rounded-3xl bg-[#0c1117] border border-white/10 shadow-soft space-y-4">
+                <h3 class="text-sm font-bold text-white border-b border-white/10 pb-3">Homepage Section Visibility</h3>
+                <p class="text-xs text-slate-400">Show or hide each homepage section.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    @foreach([
+                        'section_hero_carousel_enabled' => 'Hero Carousel',
+                        'section_categories_strip_enabled' => 'Category Strip',
+                        'section_deals_enabled' => 'Deals of the Day',
+                        'section_mobiles_enabled' => 'Smartphones',
+                        'section_laptops_enabled' => 'Laptops',
+                        'section_clothing_enabled' => 'Clothing & Fashion',
+                        'section_appliances_enabled' => 'Home Appliances',
+                        'section_audio_enabled' => 'Audio & Wearables',
+                        'section_footwear_enabled' => 'Footwear',
+                        'section_assurance_enabled' => 'Assurance Badges',
+                    ] as $key => $label)
+                    <label class="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between cursor-pointer">
+                        <span class="font-bold text-slate-200">{{ $label }}</span>
+                        <input type="checkbox" name="{{ $key }}" value="1" {{ $settings[$key] ? 'checked' : '' }} class="text-brand-600 rounded w-4 h-4">
+                    </label>
+                    @endforeach
+                </div>
+            </div>
+
             <div class="p-6 rounded-3xl bg-[#0c1117] border border-white/10 shadow-soft space-y-4">
                 <h3 class="text-sm font-bold text-white border-b border-white/10 pb-3">Hero Deals Image Carousel (JSON Slides)</h3>
                 <p class="text-xs text-slate-400">Configure deals carousel slides with custom headline, subtitle, high-res image, and button link.</p>
@@ -341,6 +380,11 @@
                     <div class="sm:col-span-2">
                         <label class="font-bold text-slate-300 block mb-1">Copyright Footer Text</label>
                         <input type="text" name="footer_copyright" value="{{ $settings['footer_copyright'] }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-xs">
+                        <span class="text-[11px] text-slate-400 block mt-1">Use {year} to insert the current year.</span>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="font-bold text-slate-300 block mb-1">Footer Payment Methods Text</label>
+                        <input type="text" name="payment_methods_text" value="{{ $settings['payment_methods_text'] }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-xs">
                     </div>
                 </div>
 
@@ -372,10 +416,12 @@
                         <i data-lucide="credit-card" class="w-4 h-4 text-brand-400"></i>
                         <span>Razorpay Payment Gateway Setup</span>
                     </h3>
-                    <span class="text-[10px] font-mono bg-brand-500/20 text-brand-400 font-bold px-2 py-0.5 rounded border border-brand-500/30">
-                        256-Bit SSL
-                    </span>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <span class="text-xs text-slate-300 font-bold">Enable Online Payments</span>
+                        <input type="checkbox" name="razorpay_enabled" value="1" {{ $settings['razorpay_enabled'] ? 'checked' : '' }} class="text-brand-600 rounded w-4 h-4">
+                    </label>
                 </div>
+                <p class="text-[11px] text-slate-400">When disabled, checkout offers Cash on Delivery only.</p>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -386,17 +432,47 @@
                         <label class="font-bold text-slate-300 block mb-1">Razorpay Key Secret</label>
                         <input type="password" name="razorpay_key_secret" value="{{ $settings['razorpay_key_secret'] }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs">
                     </div>
+                    <div class="sm:col-span-2">
+                        <label class="font-bold text-slate-300 block mb-1">Webhook Secret</label>
+                        <input type="password" name="razorpay_webhook_secret" value="{{ $settings['razorpay_webhook_secret'] }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs">
+                        <span class="text-[11px] text-slate-400 block mt-1">Webhook URL: <span class="font-mono">{{ route('webhook.razorpay') }}</span></span>
+                    </div>
                 </div>
 
                 <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
                     <div>
                         <span class="font-bold text-slate-200 block text-xs">Developer Sandbox / Mock Checkout Mode</span>
-                        <span class="text-[11px] text-slate-400">Allows instant simulated test orders without requiring live banking or active test card charges.</span>
+                        <span class="text-[11px] text-slate-400">Allows instant simulated test orders without requiring live banking or active test card charges. Always off in production.</span>
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" name="razorpay_mock_mode" value="1" {{ $settings['razorpay_mock_mode'] ? 'checked' : '' }} class="sr-only peer">
                         <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
                     </label>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-3xl bg-[#0c1117] border border-white/10 shadow-soft space-y-4">
+                <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 class="text-sm font-bold text-white">Google Sign-In</h3>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <span class="text-xs text-slate-300 font-bold">Enable Google Login</span>
+                        <input type="checkbox" name="google_login_enabled" value="1" {{ $settings['google_login_enabled'] ? 'checked' : '' }} class="text-brand-600 rounded w-4 h-4">
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">OAuth Client ID</label>
+                        <input type="text" name="google_client_id" value="{{ $settings['google_client_id'] }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs">
+                    </div>
+                    <div>
+                        <label class="font-bold text-slate-300 block mb-1">OAuth Client Secret</label>
+                        <input type="password" name="google_client_secret" value="{{ $settings['google_client_secret'] }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="font-bold text-slate-300 block mb-1">Redirect URI (optional)</label>
+                        <input type="url" name="google_redirect_uri" value="{{ $settings['google_redirect_uri'] }}" placeholder="{{ route('auth.google.callback') }}" class="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-mono text-xs">
+                    </div>
                 </div>
             </div>
 

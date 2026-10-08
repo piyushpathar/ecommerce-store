@@ -124,7 +124,7 @@
                     </span>
                     @endif
                 </div>
-                <p class="text-[11px] text-slate-500">Inclusive of all taxes &bull; Free express delivery above ₹999</p>
+                <p class="text-[11px] text-slate-500">Inclusive of all taxes &bull; Free delivery above ₹{{ number_format((float) \App\Models\Setting::get('free_shipping_threshold')) }}</p>
             </div>
 
             <!-- Variants Selection -->

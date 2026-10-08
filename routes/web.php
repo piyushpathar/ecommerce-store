@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\PlanController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AccountController;
@@ -14,7 +13,6 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\ProductController as AdminProduct;
 use App\Http\Controllers\Admin\CategoryController as AdminCategory;
 use App\Http\Controllers\Admin\OrderController as AdminOrder;
-use App\Http\Controllers\Admin\PlanController as AdminPlan;
 use App\Http\Controllers\Admin\CouponController as AdminCoupon;
 use App\Http\Controllers\Admin\UserController as AdminUser;
 use App\Http\Controllers\Admin\SettingController as AdminSetting;
@@ -30,8 +28,6 @@ Route::get('/category/{slug}', [ShopController::class, 'category'])->name('shop.
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('shop.product');
 Route::post('/product/{slug}/review', [ShopController::class, 'storeReview'])->name('shop.review.store');
 
-Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
-Route::get('/plans/{slug}/checkout', [PlanController::class, 'subscribe'])->name('plans.subscribe');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::get('/api/search/suggest', [SearchController::class, 'suggest'])->name('search.suggest');
@@ -132,12 +128,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/orders', [AdminOrder::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [AdminOrder::class, 'show'])->name('orders.show');
     Route::post('/orders/{id}/status', [AdminOrder::class, 'updateStatus'])->name('orders.status');
-
-    // Plans
-    Route::get('/plans', [AdminPlan::class, 'index'])->name('plans.index');
-    Route::post('/plans', [AdminPlan::class, 'store'])->name('plans.store');
-    Route::put('/plans/{id}', [AdminPlan::class, 'update'])->name('plans.update');
-    Route::delete('/plans/{id}', [AdminPlan::class, 'destroy'])->name('plans.destroy');
 
     // Coupons
     Route::get('/coupons', [AdminCoupon::class, 'index'])->name('coupons.index');

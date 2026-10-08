@@ -69,8 +69,6 @@ return new class extends Migration
             $table->string('customer_email')->nullable()->index();
             $table->string('customer_phone')->nullable();
             $table->json('items')->nullable();
-            $table->string('plan_id')->nullable();
-            $table->boolean('is_subscription')->default(false);
             $table->decimal('subtotal', 12, 2)->default(0);
             $table->decimal('discount_amount', 12, 2)->default(0);
             $table->string('coupon_code')->nullable();
@@ -143,28 +141,10 @@ return new class extends Migration
             $table->boolean('is_approved')->default(true);
             $table->timestamps();
         });
-
-        // 8. Plans
-        Schema::create('plans', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('badge')->nullable();
-            $table->decimal('price', 12, 2)->default(0);
-            $table->string('interval')->default('month');
-            $table->integer('duration_days')->default(30);
-            $table->json('features')->nullable();
-            $table->boolean('is_trial')->default(false);
-            $table->boolean('is_popular')->default(false);
-            $table->boolean('is_active')->default(true);
-            $table->integer('sort_order')->default(0);
-            $table->timestamps();
-        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('plans');
         Schema::dropIfExists('reviews');
         Schema::dropIfExists('settings');
         Schema::dropIfExists('pages');

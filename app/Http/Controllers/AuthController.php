@@ -87,13 +87,13 @@ class AuthController extends Controller
      */
     public function googleRedirect()
     {
-        $enabled = \App\Models\Setting::get('google_login_enabled', '1');
+        $enabled = \App\Models\Setting::get('google_login_enabled');
         if ($enabled !== '1') {
             return redirect()->route('login')->with('error', 'Google Sign-In is currently disabled in store configuration.');
         }
 
         $clientId = \App\Models\Setting::get('google_client_id');
-        $redirectUri = \App\Models\Setting::get('google_redirect_uri', route('auth.google.callback'));
+        $redirectUri = \App\Models\Setting::get('google_redirect_uri') ?: route('auth.google.callback');
 
         // If mock client id or empty, use simulated authentication (local only)
         if (empty($clientId) || str_contains($clientId, 'mockclientid')) {
@@ -117,7 +117,7 @@ class AuthController extends Controller
 
     public function googleCallback(Request $request)
     {
-        $enabled = \App\Models\Setting::get('google_login_enabled', '1');
+        $enabled = \App\Models\Setting::get('google_login_enabled');
         if ($enabled !== '1') {
             return redirect()->route('login')->with('error', 'Google Sign-In is disabled.');
         }
@@ -125,7 +125,7 @@ class AuthController extends Controller
         $code = $request->input('code');
         $clientId = \App\Models\Setting::get('google_client_id');
         $clientSecret = \App\Models\Setting::get('google_client_secret');
-        $redirectUri = \App\Models\Setting::get('google_redirect_uri', route('auth.google.callback'));
+        $redirectUri = \App\Models\Setting::get('google_redirect_uri') ?: route('auth.google.callback');
 
         if ($code && !empty($clientId) && !empty($clientSecret) && !str_contains($clientId, 'mockclientid')) {
             try {
@@ -194,7 +194,7 @@ class AuthController extends Controller
         // Passwordless login by email: never reachable outside local development
         abort_unless(app()->environment('local'), 404);
 
-        $enabled = \App\Models\Setting::get('google_login_enabled', '1');
+        $enabled = \App\Models\Setting::get('google_login_enabled');
         if ($enabled !== '1') {
             return redirect()->route('login')->with('error', 'Google Sign-In is disabled.');
         }

@@ -12,12 +12,6 @@
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
-    <url>
-        <loc>{{ route('plans.index') }}</loc>
-        <lastmod>{{ date('Y-m-d') }}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-    </url>
     @foreach($categories as $category)
     <url>
         <loc>{{ route('shop.category', $category->slug) }}</loc>

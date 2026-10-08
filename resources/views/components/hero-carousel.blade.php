@@ -1,46 +1,5 @@
 @php
-    $heroSlidesJson = \App\Models\Setting::get('hero_slides');
-    $slides = $heroSlidesJson ? json_decode($heroSlidesJson, true) : null;
-    if (empty($slides) || !is_array($slides)) {
-        $slides = [
-            [
-                'badge' => '⚡ Tech Mega Festival',
-                'title' => 'iPhone 16 Pro & Galaxy S24 Ultra',
-                'subtitle' => 'Up to ₹20,000 exchange bonus + Instant bank discounts with same-day express dispatch.',
-                'image' => 'https://images.unsplash.com/photo-1616469829941-c7200edec809?auto=format&fit=crop&w=1600&q=80',
-                'button_text' => 'Shop Flagships',
-                'button_url' => '/category/smartphones-tablets',
-                'bg_gradient' => 'from-black/90 via-black/60 to-transparent'
-            ],
-            [
-                'badge' => '✨ Wardrobe & Apparel',
-                'title' => 'Trendsetting Clothing & Fashion',
-                'subtitle' => 'Discover Levi\'s, Ralph Lauren, Zara jackets, formalwear, and premium cotton essentials.',
-                'image' => 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80',
-                'button_text' => 'Explore Clothing',
-                'button_url' => '/category/clothing-fashion',
-                'bg_gradient' => 'from-slate-950/90 via-slate-950/65 to-transparent'
-            ],
-            [
-                'badge' => '🏠 Smart Living & Kitchen',
-                'title' => 'Home & Kitchen Appliances',
-                'subtitle' => 'Dyson smart vacuums, Breville espresso makers, air fryers & intelligent living solutions.',
-                'image' => 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1600&q=80',
-                'button_text' => 'Shop Appliances',
-                'button_url' => '/category/home-appliances',
-                'bg_gradient' => 'from-black/90 via-black/60 to-transparent'
-            ],
-            [
-                'badge' => '🎧 Studio Sound & Wearables',
-                'title' => 'Sony ANC & Apple AirPods Max',
-                'subtitle' => 'World-class active noise cancellation with Hi-Res spatial acoustic clarity.',
-                'image' => 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1600&q=80',
-                'button_text' => 'Explore Audio',
-                'button_url' => '/category/audio-wearables',
-                'bg_gradient' => 'from-black/90 via-black/60 to-transparent'
-            ]
-        ];
-    }
+    $slides = \App\Models\Setting::json('hero_slides');
     $totalSlides = count($slides);
 @endphp
 

@@ -4,7 +4,7 @@
 @section('meta_description', $category->description)
 
 @section('content')
-<div class="max-w-[1440px] mx-auto px-2.5 sm:px-4 lg:px-8 py-2 sm:py-4 space-y-3 sm:space-y-4" x-data="{ mobileFiltersOpen: false }">
+<div class="max-w-[1440px] mx-auto px-2.5 sm:px-4 lg:px-8 py-2 sm:py-4 space-y-3 sm:space-y-4">
 
     <!-- 1. Visual Category Navigation Strip -->
     <x-category-strip :categories="$categories" :activeSlug="$category->slug" />
@@ -126,19 +126,9 @@
         </div>
 
         <div class="flex items-center gap-2 shrink-0">
-            <!-- Mobile Filter Trigger -->
-            <button type="button"
-                    @click="mobileFiltersOpen = !mobileFiltersOpen"
-                    class="lg:hidden h-8 px-2.5 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5">
-                <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-brand-500"></i>
-                <span>Filters</span>
-                @if(request()->anyFilled(['brand', 'min_price', 'max_price', 'min_rating', 'in_stock_only']))
-                <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                @endif
-            </button>
 
             <!-- Custom Combobox: Sorting Dropdown -->
-            <div class="relative" x-data="{
+            <div class="relative hidden lg:block" x-data="{
                 open: false,
                 currentSort: '{{ request('sort', 'relevance') }}',
                 sortOptions: {
@@ -177,69 +167,17 @@
         </div>
     </div>
 
-    <!-- Mobile Filter Slide-Over Drawer -->
-    <div x-show="mobileFiltersOpen" 
-         x-cloak 
-         class="fixed inset-0 z-50 lg:hidden flex justify-end">
-        <!-- Backdrop -->
-        <div x-show="mobileFiltersOpen" 
-             x-transition:enter="transition-opacity ease-linear duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition-opacity ease-linear duration-300"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             @click="mobileFiltersOpen = false" 
-             class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
-
-        <!-- Sliding Panel -->
-        <div x-show="mobileFiltersOpen" 
-             x-transition:enter="transition ease-in-out duration-300 transform"
-             x-transition:enter-start="translate-x-full"
-             x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition ease-in-out duration-300 transform"
-             x-transition:leave-start="translate-x-0"
-             x-transition:leave-end="translate-x-full"
-             class="relative w-full max-w-xs sm:max-w-sm bg-white dark:bg-[#0b1019] h-full shadow-2xl flex flex-col z-10 overflow-hidden">
-            
-            <!-- Mobile Drawer Header -->
-            <div class="p-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-white/5">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-500"></i>
-                    <h3 class="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">{{ $category->name }} Filters</h3>
-                </div>
-                <button type="button" @click="mobileFiltersOpen = false" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-white">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-
-            <!-- Drawer Body -->
-            <div class="flex-1 overflow-y-auto p-3">
-                <x-filter-sidebar :categories="$categories" :brands="$brands" :activeCategory="$category" :actionUrl="route('shop.category', $category->slug)" :totalProducts="$products->total()" />
-            </div>
-
-            <!-- Drawer Footer -->
-            <div class="p-3 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 flex items-center gap-2">
-                <a href="{{ route('shop.category', $category->slug) }}" class="w-1/3 py-2.5 text-center rounded-xl border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5">
-                    Reset
-                </a>
-                <button type="button" @click="mobileFiltersOpen = false" class="w-2/3 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-emerald-600 text-white text-xs font-bold text-center shadow-glow">
-                    Show {{ $products->total() }} Results
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- 4. Layout Grid: Sidebar + Product Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 lg:gap-5 items-start">
 
         <!-- Desktop Filters Sidebar (Sticky) -->
-        <aside class="hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2 sticky top-20">
+        <aside class="hidden lg:block lg:col-span-3 xl:col-span-3 2xl:col-span-2 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl">
             <x-filter-sidebar :categories="$categories" :brands="$brands" :activeCategory="$category" :actionUrl="route('shop.category', $category->slug)" :totalProducts="$products->total()" />
         </aside>
 
         <!-- Product Cards Grid Area -->
-        <div class="lg:col-span-9 xl:col-span-10">
+        <div class="lg:col-span-9 xl:col-span-9 2xl:col-span-10">
 
             @if($products->isEmpty())
             <div class="bg-white dark:bg-[#0f1723] rounded-2xl p-8 sm:p-12 text-center border border-slate-200 dark:border-white/10 shadow-2xs space-y-3">
@@ -269,6 +207,7 @@
 
         </div>
     </div>
+    <!-- Mobile: sticky Sort / Filter bar with bottom sheets -->
+    <x-mobile-filter-bar :categories="$categories" :brands="$brands" :activeCategory="$category" :actionUrl="route('shop.category', $category->slug)" :totalProducts="$products->total()" />
 </div>
 @endsection
-

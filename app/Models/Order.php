@@ -15,8 +15,6 @@ class Order extends Model
         'customer_email',
         'customer_phone',
         'items',
-        'plan_id',
-        'is_subscription',
         'subtotal',
         'discount_amount',
         'coupon_code',
@@ -45,17 +43,11 @@ class Order extends Model
         'shipping_fee' => 'float',
         'tax_amount' => 'float',
         'total_amount' => 'float',
-        'is_subscription' => 'boolean',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function plan()
-    {
-        return $this->belongsTo(Plan::class, 'plan_id');
     }
 
     public function getFormattedTotalAttribute(): string

@@ -8,7 +8,7 @@
          selectedAddressId: '{{ !empty($addresses[0]['id']) ? $addresses[0]['id'] : '' }}',
          showAddressModal: false,
          shippingType: '{{ $shippingType }}',
-         paymentMethod: 'razorpay',
+         paymentMethod: '{{ $razorpayEnabled ? 'razorpay' : 'cod' }}',
          customerName: '{{ $user->name ?? '' }}',
          customerEmail: '{{ $user->email ?? '' }}',
          customerPhone: '{{ $user->phone ?? '' }}',
@@ -78,7 +78,7 @@
                          if (verifyData.success) {
                              window.location.href = verifyData.redirect;
                          } else {
-                             alert('Payment verification failed.');
+                             alert(verifyData.message || 'Payment verification failed.');
                          }
                      }
                      this.isProcessing = false;
@@ -114,6 +114,8 @@
                          const verifyData = await verifyRes.json();
                          if (verifyData.success) {
                              window.location.href = verifyData.redirect;
+                         } else {
+                             alert(verifyData.message || 'Payment verification failed. Please contact support.');
                          }
                      },
                      prefill: {
@@ -243,6 +245,7 @@
 
                 <div class="space-y-3">
                     <!-- Razorpay -->
+                    @if($razorpayEnabled)
                     <label class="p-4 rounded-2xl border cursor-pointer flex items-center justify-between transition-all"
                            :class="{ 'border-brand-500 ring-2 ring-brand-500/20 bg-brand-50/30 dark:bg-brand-950/20': paymentMethod === 'razorpay', 'border-slate-200 dark:border-white/10': paymentMethod !== 'razorpay' }">
                         <div class="flex items-center gap-3">
@@ -257,6 +260,7 @@
                         </div>
                         <i data-lucide="shield-check" class="w-5 h-5 text-brand-500"></i>
                     </label>
+                    @endif
 
                     <!-- Cash on Delivery (COD) -->
                     <label class="p-4 rounded-2xl border cursor-pointer flex items-center justify-between transition-all"

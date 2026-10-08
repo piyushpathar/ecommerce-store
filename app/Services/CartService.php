@@ -12,18 +12,57 @@ class CartService
     protected string $sessionKey = 'novamart_cart';
     protected string $couponKey = 'novamart_applied_coupon';
 
+    protected bool $synced = false;
+
     public function getItems(): array
     {
-        return Session::get($this->sessionKey, []);
+        $cart = Session::get($this->sessionKey, []);
+        if ($this->synced || empty($cart)) {
+            return $cart;
+        }
+        $this->synced = true;
+
+        // Keep cart prices and stock in line with the catalogue, so admin edits apply immediately
+        $products = Product::whereIn('id', array_column($cart, 'product_id'))
+            ->where('is_active', true)
+            ->get()
+            ->keyBy('id');
+
+        foreach ($cart as $key => $item) {
+            $product = $products->get($item['product_id']);
+            if (!$product) {
+                unset($cart[$key]);
+                continue;
+            }
+            $cart[$key]['title'] = $product->title;
+            $cart[$key]['price'] = (float) $product->price;
+            $cart[$key]['compare_price'] = (float) ($product->compare_price ?? $product->price);
+            $cart[$key]['stock'] = (int) $product->stock;
+        }
+
+        Session::put($this->sessionKey, $cart);
+        return $cart;
     }
 
+    /**
+     * @throws \RuntimeException when the product can't be added in that quantity
+     */
     public function add(Product $product, int $quantity = 1, ?string $variant = null): array
     {
+        if (!$product->is_active || $product->stock < 1) {
+            throw new \RuntimeException("{$product->title} is currently out of stock.");
+        }
+
         $cart = $this->getItems();
         $itemKey = $product->id . ($variant ? '_' . md5($variant) : '');
+        $newQuantity = ($cart[$itemKey]['quantity'] ?? 0) + $quantity;
+
+        if ($newQuantity > $product->stock) {
+            throw new \RuntimeException("Only {$product->stock} unit(s) of {$product->title} are in stock.");
+        }
 
         if (isset($cart[$itemKey])) {
-            $cart[$itemKey]['quantity'] += $quantity;
+            $cart[$itemKey]['quantity'] = $newQuantity;
         } else {
             $cart[$itemKey] = [
                 'product_id' => $product->id,
@@ -50,11 +89,22 @@ class CartService
             if ($quantity <= 0) {
                 unset($cart[$itemKey]);
             } else {
-                $cart[$itemKey]['quantity'] = $quantity;
+                $cart[$itemKey]['quantity'] = min($quantity, $cart[$itemKey]['stock']);
             }
             Session::put($this->sessionKey, $cart);
         }
         return $this->getSummary();
+    }
+
+    /** First item whose quantity exceeds current stock, as a customer-facing message. */
+    public function stockError(): ?string
+    {
+        foreach ($this->getItems() as $item) {
+            if ($item['quantity'] > $item['stock']) {
+                return "Only {$item['stock']} unit(s) of {$item['title']} are in stock. Please update your cart.";
+            }
+        }
+        return null;
     }
 
     public function remove(string $itemKey): array
@@ -142,9 +192,9 @@ class CartService
             return 0.0;
         }
 
-        $freeThreshold = (float) Setting::get('free_shipping_threshold', 999);
-        $standardFee = (float) Setting::get('standard_shipping_fee', 99);
-        $expressFee = (float) Setting::get('express_shipping_fee', 199);
+        $freeThreshold = (float) Setting::get('free_shipping_threshold');
+        $standardFee = (float) Setting::get('standard_shipping_fee');
+        $expressFee = (float) Setting::get('express_shipping_fee');
 
         if ($type === 'express') {
             return $expressFee;
@@ -167,7 +217,7 @@ class CartService
         }
 
         $appliedCoupon = Session::get($this->couponKey);
-        $freeThreshold = (float) Setting::get('free_shipping_threshold', 999);
+        $freeThreshold = (float) Setting::get('free_shipping_threshold');
         $awayFromFree = max(0.0, $freeThreshold - $subtotal);
 
         return [

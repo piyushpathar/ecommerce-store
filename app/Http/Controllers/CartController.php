@@ -33,7 +33,14 @@ class CartController extends Controller
         $qty = (int) ($request->input('quantity', 1));
         $variant = $request->input('variant');
 
-        $summary = $this->cartService->add($product, $qty, $variant);
+        try {
+            $summary = $this->cartService->add($product, $qty, $variant);
+        } catch (\RuntimeException $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $e->getMessage()], 422);
+            }
+            return back()->with('error', $e->getMessage());
+        }
 
         if ($request->wantsJson()) {
             return response()->json([
