@@ -1747,26 +1747,18 @@ class EcommerceSeeder extends Seeder
         Setting::set('store_phone', '+91 8000 999 888');
         Setting::set('store_address', 'NovaMart Headquarters, Bandra Kurla Complex, Mumbai, Maharashtra 400051');
         Setting::set('announcement_bar', '⚡ MEGA SALE FESTIVAL: Get Flat 10% Off with Code NOVAMART10 · Free 1-Day Delivery Across India on Orders Above ₹499');
-        Setting::set('currency_symbol', '₹');
         Setting::set('free_shipping_threshold', '499');
         Setting::set('standard_shipping_fee', '49');
         Setting::set('express_shipping_fee', '99');
 
-        // Payment Gateway: Razorpay
+        // Payment Gateway: Razorpay (keys come from .env or Admin > Settings)
         Setting::set('razorpay_enabled', '1');
-        Setting::set('razorpay_key_id', 'rzp_test_NovaMart2026');
-        Setting::set('razorpay_key_secret', 'secret_NovaMartSecret2026');
-        Setting::set('razorpay_webhook_secret', 'whsec_novamart_live_webhook_token_99');
         Setting::set('razorpay_mock_mode', '1');
 
-        // OAuth: Google Credentials
+        // Google Sign-In (credentials come from .env or Admin > Settings)
         Setting::set('google_login_enabled', '1');
-        Setting::set('google_client_id', '1029384756-mockclientid.apps.googleusercontent.com');
-        Setting::set('google_client_secret', 'GOCSPX-mocksecretvalue998811');
-        Setting::set('google_redirect_uri', 'http://127.0.0.1:8000/auth/google/callback');
 
         // WordPress-Style Modular Section Controls (Enable/Disable anything)
-        Setting::set('section_announcement_enabled', '1');
         Setting::set('section_hero_carousel_enabled', '1');
         Setting::set('section_categories_strip_enabled', '1');
         Setting::set('section_deals_enabled', '1');
