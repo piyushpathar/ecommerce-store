@@ -95,9 +95,12 @@ class AuthController extends Controller
         $clientId = \App\Models\Setting::get('google_client_id');
         $redirectUri = \App\Models\Setting::get('google_redirect_uri', route('auth.google.callback'));
 
-        // If mock client id or empty, smoothly use one-click simulated authentication
+        // If mock client id or empty, use simulated authentication (local only)
         if (empty($clientId) || str_contains($clientId, 'mockclientid')) {
-            return redirect()->route('auth.google.simulate');
+            if (app()->environment('local')) {
+                return redirect()->route('auth.google.simulate');
+            }
+            return redirect()->route('login')->with('error', 'Google Sign-In is not configured.');
         }
 
         $params = http_build_query([
@@ -178,12 +181,19 @@ class AuthController extends Controller
             }
         }
 
-        // Fallback to simulated sign in if live exchange failed or test mode
-        return redirect()->route('auth.google.simulate');
+        // Fallback to simulated sign in if live exchange failed or test mode (local only)
+        if (app()->environment('local')) {
+            return redirect()->route('auth.google.simulate');
+        }
+
+        return redirect()->route('login')->with('error', 'Google Sign-In failed. Please try again.');
     }
 
     public function googleSimulate(Request $request)
     {
+        // Passwordless login by email: never reachable outside local development
+        abort_unless(app()->environment('local'), 404);
+
         $enabled = \App\Models\Setting::get('google_login_enabled', '1');
         if ($enabled !== '1') {
             return redirect()->route('login')->with('error', 'Google Sign-In is disabled.');

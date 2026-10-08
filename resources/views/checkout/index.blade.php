@@ -9,9 +9,9 @@
          showAddressModal: false,
          shippingType: '{{ $shippingType }}',
          paymentMethod: 'razorpay',
-         customerName: '{{ $user->name ?? 'Rahul Sharma' }}',
-         customerEmail: '{{ $user->email ?? 'demo@novamart.com' }}',
-         customerPhone: '{{ $user->phone ?? '9988776655' }}',
+         customerName: '{{ $user->name ?? '' }}',
+         customerEmail: '{{ $user->email ?? '' }}',
+         customerPhone: '{{ $user->phone ?? '' }}',
          addresses: {{ json_encode($addresses) }},
          getSelectedAddress() {
              return this.addresses.find(a => a.id === this.selectedAddressId) || this.addresses[0] || null;
